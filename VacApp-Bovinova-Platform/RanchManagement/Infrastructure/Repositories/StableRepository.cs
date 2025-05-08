@@ -6,16 +6,11 @@ using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Repositorie
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Infrastructure.Repositories;
 
-public class BovineRepository(AppDbContext ctx)
-    : BaseRepository<Bovine>(ctx), IBovineRepository
+public class StableRepository(AppDbContext ctx)
+    : BaseRepository<Stable>(ctx), IStableRepository
 {
-    public async Task<Bovine?> FindByNameAsync(string name)
+    public async Task<Stable?> FindByNameAsync(string name)
     {
-        return await Context.Set<Bovine>().FirstOrDefaultAsync(f=>f.Name == name);
-    }
-    
-    public async Task<IEnumerable<Bovine>> FindByStableIdAsync(int? stableId)
-    {
-        return await Context.Set<Bovine>().Where(f => f.StableId == stableId).ToListAsync();
+        return await Context.Set<Stable>().FirstOrDefaultAsync(f=>f.Name == name);
     }
 }

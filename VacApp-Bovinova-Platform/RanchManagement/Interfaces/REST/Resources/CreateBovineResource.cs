@@ -5,4 +5,5 @@ public record CreateBovineResource(string Name,
     DateTime? BirthDate,
     string? Breed,
     string? Location,
-    string? BovineImg);
+    string? BovineImg,
+    int? StableId);

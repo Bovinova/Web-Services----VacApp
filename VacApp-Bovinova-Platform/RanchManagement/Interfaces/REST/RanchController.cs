@@ -8,6 +8,9 @@ using VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Transform;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST;
 
+/// <summary>
+/// API controller for managing bovines
+/// </summary>
 [ApiController]
 [Route("/api/v1/bovines")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -49,8 +52,28 @@ public class BovineController(IBovineCommandService commandService,
         var resources = BovineResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
     }
+    
+    [HttpGet("stable/{stableId}")]
+    [SwaggerOperation(
+        Summary = "Get all bovines by stable ID",
+        Description = "Get all bovines by stable ID",
+        OperationId = "GetBovinesByStableId")]
+    public async Task<ActionResult> GetBovinesByStableId(int? stableId)
+    {
+        var getBovinesByStableIdQuery = new GetBovinesByStableIdQuery(stableId);
+        var bovines = await queryService.Handle(getBovinesByStableIdQuery);
+
+        if (bovines == null || !bovines.Any()) 
+            return NotFound();
+
+        var bovineResources = bovines.Select(BovineResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(bovineResources);
+    }
 }
 
+/// <summary>
+/// API controller for managing vaccines
+/// </summary>
 [ApiController]
 [Route("/api/v1/vaccines")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -94,3 +117,49 @@ public class VaccineController(
         return Ok(resources);
     }
 }
+
+/// <summary>
+/// API controller for managing stables
+/// </summary>
+[ApiController]
+[Route("/api/v1/stables")]
+[Produces(MediaTypeNames.Application.Json)]
+[Tags("Stables")]
+public class StableController(
+    IStableCommandService commandService,
+    IStableQueryService queryService) : ControllerBase
+{
+    [HttpPost]
+    public async Task<IActionResult> CreateStables([FromBody] CreateStableResource resource)
+    {
+        var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await commandService.Handle(command);
+        if (result is null) return BadRequest();
+
+        return CreatedAtAction(nameof(GetStableById), new { id = result.Id },
+            StableResourceFromEntityAssembler.ToResourceFromEntity(result));
+    }
+
+    [HttpGet]
+    [SwaggerOperation(
+        Summary = "Get all stables",
+        Description = "Get all stables",
+        OperationId = "GetAllStable")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The list of stables were found", typeof(IEnumerable<StableResource>))]
+    public async Task<IActionResult> GetAllStable()
+    {
+        var stables = await queryService.Handle(new GetAllStablesQuery());
+        var stableResources = stables.Select(StableResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(stableResources);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetStableById(int id)
+    {
+        var getStableById = new GetStablesByIdQuery(id);
+        var result = await queryService.Handle(getStableById);
+        if (result is null) return NotFound();
+        var resources = StableResourceFromEntityAssembler.ToResourceFromEntity(result);
+        return Ok(resources);
+    }
+} 

@@ -65,6 +65,10 @@ builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
 builder.Services.AddScoped<IVaccineQueryService, VaccineQueryService>();
 builder.Services.AddScoped<IVaccineCommandService, VaccineCommandService>();
 
+builder.Services.AddScoped<IStableRepository, StableRepository>();
+builder.Services.AddScoped<IStableQueryService, StableQueryService>();
+builder.Services.AddScoped<IStableCommandService, StableCommandService>();
+
 /////////////////////////End Database Configuration/////////////////////////
 var app = builder.Build();
 

@@ -6,4 +6,5 @@ public record CreateBovineCommand(
     DateTime? BirthDate,
     string? Breed,
     string? Location,
-    string? BovineImg);
+    string? BovineImg,
+    int? StableId);

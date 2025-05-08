@@ -8,4 +8,6 @@ public interface IBovineQueryService
     Task<IEnumerable<Bovine>> Handle(GetAllBovinesQuery query);
     
     Task<Bovine> Handle(GetBovinesByIdQuery query);
+    
+    Task<IEnumerable<Bovine>> Handle(GetBovinesByStableIdQuery query);
 }
