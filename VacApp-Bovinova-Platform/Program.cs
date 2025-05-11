@@ -1,4 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using VacApp_Bovinova_Platform.CampaignManagement.Application.Internal.CommandServices;
+using VacApp_Bovinova_Platform.CampaignManagement.Application.Internal.QueryServices;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Repositories;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
+using VacApp_Bovinova_Platform.CampaignManagement.Infrastructure.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServices;
 using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.QueryServices;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
@@ -64,6 +69,14 @@ builder.Services.AddScoped<IBovineCommandService, BovineCommandService>();
 builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
 builder.Services.AddScoped<IVaccineQueryService, VaccineQueryService>();
 builder.Services.AddScoped<IVaccineCommandService, VaccineCommandService>();
+
+//Campaign Management BC
+builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
+builder.Services.AddScoped<ICampaignCommandService, CampaignCommandService>();
+builder.Services.AddScoped<ICampaignQueryService, CampaignQueryService>();
+
+
+
 
 /////////////////////////End Database Configuration/////////////////////////
 var app = builder.Build();

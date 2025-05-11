@@ -1,5 +1,6 @@
 using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
 using Microsoft.EntityFrameworkCore;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
@@ -40,8 +41,25 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Vaccine>().Property(f => f.VaccineImg).IsRequired();
         builder.Entity<Vaccine>().Property(f => f.BovineId).IsRequired();
         
-        /* ---------------------------------------------------------------------------------------------------------- */
+        /* ---------------------------------------------------------------------------------------------------------- * /
         
-        builder.UseSnakeCaseNamingConvention();
-    }
+        
+        
+        
+        /* Campaign Management BC -------------------------------------------------------------------------------------- */
+        
+        builder.Entity<Campaign>().HasKey(c=>c.Id);
+        builder.Entity<Campaign>().Property(c=>c.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Campaign>().Property(c=>c.Name).IsRequired();
+        builder.Entity<Campaign>().Property(c=>c.Description).IsRequired();
+        builder.Entity<Campaign>().Property(c=>c.StartDate).IsRequired();
+        builder.Entity<Campaign>().Property(c=>c.EndDate).IsRequired();
+        builder.Entity<Campaign>().Property(c => c.Status).IsRequired();
+        /* ---------------------------------------------------------------------------------------------------------- * /
+        /* ---------------------------------------------------------------------------------------------------------- * /*/
+
+
+
+builder.UseSnakeCaseNamingConvention();
+}
 }
