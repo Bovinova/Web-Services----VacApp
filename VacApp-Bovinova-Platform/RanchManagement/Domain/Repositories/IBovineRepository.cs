@@ -9,4 +9,11 @@ public interface IBovineRepository : IBaseRepository<Bovine>
     Task<Bovine?> FindByNameAsync(string name);
     
     Task<IEnumerable<Bovine>> FindByStableIdAsync(int? stableId);
+    
+    Task<int> CountBovinesByStableIdAsync(int stableId);
+    
+    /*
+    Task UpdateAsync(Bovine bovine);
+    
+    Task DeleteAsync(Bovine bovine);*/
 }

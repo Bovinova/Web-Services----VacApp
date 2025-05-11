@@ -6,4 +6,6 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 public interface IVaccineRepository : IBaseRepository<Vaccine>
 {
     Task<Vaccine?> FindByNameAsync(string name);
+    
+    Task<IEnumerable<Vaccine>> FindByBovineIdAsync(int? bovineId);
 }

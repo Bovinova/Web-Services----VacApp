@@ -86,4 +86,24 @@ public class Bovine
         BovineImg = command.BovineImg;
         StableId = command.StableId;
     }
+    
+    //Update Bovine
+    public void Update(UpdateBovineCommand command)
+    {
+        if (command.Gender != "male" &&
+            command.Gender != "Male" &&
+            command.Gender != "female" &&
+            command.Gender != "Female")
+        {
+            throw new ArgumentException("Gender must be either 'male' or 'female'");
+        }
+
+        Name = command.Name;
+        Gender = command.Gender;
+        BirthDate = command.BirthDate;
+        Breed = command.Breed;
+        Location = command.Location;
+        BovineImg = command.BovineImg;
+        StableId = command.StableId;
+    }
 }

@@ -27,4 +27,14 @@ public class VaccineQueryService(IVaccineRepository vaccineRepository) : IVaccin
     {
         return await vaccineRepository.FindByIdAsync(query.Id);
     }
+    
+    /// <summary>
+    /// Retrieves all vaccines by bovine ID.
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns> A collection of vaccines associated with the specified bovine ID. </returns>
+    public async Task<IEnumerable<Vaccine>> Handle(GetVaccinesByBovineIdQuery query)
+    {
+        return await vaccineRepository.FindByBovineIdAsync(query.BovineId);
+    }
 }

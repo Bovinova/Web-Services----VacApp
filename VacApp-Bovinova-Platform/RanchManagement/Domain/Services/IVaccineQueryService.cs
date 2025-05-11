@@ -8,4 +8,6 @@ public interface IVaccineQueryService
     Task<IEnumerable<Vaccine>> Handle(GetAllVaccinesQuery query);
     
     Task<Vaccine> Handle(GetVaccinesByIdQuery query);
+    
+    Task<IEnumerable<Vaccine>> Handle(GetVaccinesByBovineIdQuery query);
 }

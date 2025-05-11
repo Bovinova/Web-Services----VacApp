@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
 using VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Resources;
@@ -18,6 +19,11 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST;
 public class BovineController(IBovineCommandService commandService, 
     IBovineQueryService queryService) : ControllerBase
 {
+    /// <summary>
+    /// Posts a new bovine to the system.
+    /// </summary>
+    /// <param name="resource"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> CreateBovines([FromBody] CreateBovineResource resource)
     {
@@ -29,7 +35,10 @@ public class BovineController(IBovineCommandService commandService,
             BovineResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
 
-    
+    /// <summary>
+    /// Gets all bovines in the system.
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all bovines",
@@ -43,6 +52,11 @@ public class BovineController(IBovineCommandService commandService,
         return Ok(bovineResources);
     }
     
+    /// <summary>
+    /// Gets a bovine by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult> GetBovineById(int id)
     {
@@ -53,6 +67,11 @@ public class BovineController(IBovineCommandService commandService,
         return Ok(resources);
     }
     
+    /// <summary>
+    /// Gets all bovines by stable ID.
+    /// </summary>
+    /// <param name="stableId"></param>
+    /// <returns></returns>
     [HttpGet("stable/{stableId}")]
     [SwaggerOperation(
         Summary = "Get all bovines by stable ID",
@@ -69,6 +88,37 @@ public class BovineController(IBovineCommandService commandService,
         var bovineResources = bovines.Select(BovineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(bovineResources);
     }
+    
+    /// <summary>
+    /// Partially updates a bovine by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="resource"></param>
+    /// <returns></returns>
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateBovine(int id, [FromBody] UpdateBovineResource resource)
+    {
+        var command = UpdateBovineCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+        var result = await commandService.Handle(command);
+        if (result is null) return BadRequest();
+
+        return Ok(BovineResourceFromEntityAssembler.ToResourceFromEntity(result));
+    }
+    
+    /// <summary>
+    /// Deletes a bovine by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteBovine(int id)
+    {
+        var command = new DeleteBovineCommand(id);
+        var result = await commandService.Handle(command);
+        if (result is null) return NotFound();
+
+        return NoContent();
+    }
 }
 
 /// <summary>
@@ -82,6 +132,11 @@ public class VaccineController(
     IVaccineCommandService commandService,
     IVaccineQueryService queryService) : ControllerBase
 {
+    /// <summary>
+    /// Posts a new vaccine to the system.
+    /// </summary>
+    /// <param name="resource"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> CreateVaccines([FromBody] CreateVaccineResource resource)
     {
@@ -93,7 +148,10 @@ public class VaccineController(
             VaccineResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
 
-
+    /// <summary>
+    /// Gets all vaccines in the system.
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all vaccines",
@@ -107,6 +165,11 @@ public class VaccineController(
         return Ok(vaccineResources);
     }
 
+    /// <summary>
+    /// Gets a vaccine by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult> GetVaccineById(int id)
     {
@@ -116,6 +179,29 @@ public class VaccineController(
         var resources = VaccineResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
     }
+    
+    /// <summary>
+    /// Gets all vaccines by bovine ID.
+    /// </summary>
+    /// <param name="bovineId"></param>
+    /// <returns></returns>
+    [HttpGet("bovine/{bovineId}")]
+    [SwaggerOperation(
+        Summary = "Get all vaccines by bovine ID",
+        Description = "Get all vaccines by bovine ID",
+        OperationId = "GetVaccinesByBovineId")]
+    public async Task<ActionResult> GetVaccinesByBovineId(int? bovineId)
+    {
+        var getVaccinesByBovineIdQuery = new GetVaccinesByBovineIdQuery(bovineId);
+        var vaccines = await queryService.Handle(getVaccinesByBovineIdQuery);
+
+        if (vaccines == null || !vaccines.Any()) 
+            return NotFound();
+
+        var vaccineResources = vaccines.Select(VaccineResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(vaccineResources);
+    }
+    
 }
 
 /// <summary>

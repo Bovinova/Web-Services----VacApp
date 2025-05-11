@@ -36,4 +36,6 @@ public class BovineQueryService(IBovineRepository bovineRepository) : IBovineQue
     {
         return await bovineRepository.FindByStableIdAsync(query.StableId);
     }
+    
+    
 }
