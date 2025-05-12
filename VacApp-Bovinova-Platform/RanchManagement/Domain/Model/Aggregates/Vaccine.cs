@@ -62,4 +62,14 @@ public class Vaccine
         VaccineImg = command.VaccineImg;
         BovineId = command.BovineId;
     }
+    
+    //Update
+    public void Update(UpdateVaccineCommand command)
+    {
+        Name = command.Name;
+        VaccineType = command.VaccineType;
+        VaccineDate = command.VaccineDate;
+        VaccineImg = command.VaccineImg;
+        BovineId = command.BovineId;
+    }
 }

@@ -90,7 +90,7 @@ public class BovineController(IBovineCommandService commandService,
     }
     
     /// <summary>
-    /// Partially updates a bovine by its ID.
+    /// Updates a bovine by its ID.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="resource"></param>
@@ -202,6 +202,37 @@ public class VaccineController(
         return Ok(vaccineResources);
     }
     
+    /// <summary>
+    /// Updates a vaccine by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="resource"></param>
+    /// <returns></returns>
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateVaccine(int id, [FromBody] UpdateVaccineResource resource)
+    {
+        var command = UpdateVaccineCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+        var result = await commandService.Handle(command);
+        if (result is null) return BadRequest();
+
+        return Ok(VaccineResourceFromEntityAssembler.ToResourceFromEntity(result));
+    }
+    
+    /// <summary>
+    /// Deletes a vaccine by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteVaccine(int id)
+    {
+        var command = new DeleteVaccineCommand(id);
+        var result = await commandService.Handle(command);
+        if (result is null) return NotFound();
+
+        return NoContent();
+    }
+    
 }
 
 /// <summary>
@@ -247,5 +278,36 @@ public class StableController(
         if (result is null) return NotFound();
         var resources = StableResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
+    }
+    
+    /// <summary>
+    /// Updates a stable by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="resource"></param>
+    /// <returns></returns>
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateStable(int id, [FromBody] UpdateStableResource resource)
+    {
+        var command = UpdateStableCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+        var result = await commandService.Handle(command);
+        if (result is null) return BadRequest();
+
+        return Ok(StableResourceFromEntityAssembler.ToResourceFromEntity(result));
+    }
+    
+    /// <summary>
+    /// Deletes a stable by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteStable(int id)
+    {
+        var command = new DeleteStableCommand(id);
+        var result = await commandService.Handle(command);
+        if (result is null) return NotFound();
+
+        return NoContent();
     }
 } 

@@ -11,9 +11,4 @@ public interface IBovineRepository : IBaseRepository<Bovine>
     Task<IEnumerable<Bovine>> FindByStableIdAsync(int? stableId);
     
     Task<int> CountBovinesByStableIdAsync(int stableId);
-    
-    /*
-    Task UpdateAsync(Bovine bovine);
-    
-    Task DeleteAsync(Bovine bovine);*/
 }

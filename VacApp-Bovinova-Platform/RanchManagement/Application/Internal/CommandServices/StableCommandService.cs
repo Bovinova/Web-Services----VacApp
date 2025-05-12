@@ -33,4 +33,69 @@ public class StableCommandService(IStableRepository stableRepository,
 
         return stable;
     }
+    
+    
+    /// <summary>
+    /// Handles the update of an existing stable entity.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<Stable?> Handle(UpdateStableCommand command)
+    {
+        // Verifies if the stable exists
+        var stable = await stableRepository.FindByIdAsync(command.Id);
+        if (stable == null)
+        {
+            throw new Exception($"Stable with ID '{command.Id}' not found.");
+        }
+
+        // Updates the stable entity
+        stable.Update(command);
+
+        try
+        {
+            // Updates the stable in the repository and saves changes
+            stableRepository.Update(stable);
+            await unitOfWork.CompleteAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return stable;
+    }
+    
+    
+    /// <summary>
+    /// Handles the deletion of an existing stable entity.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<Stable?> Handle(DeleteStableCommand command)
+    {
+        // Verifies if the stable exists
+        var stable = await stableRepository.FindByIdAsync(command.Id);
+        if (stable == null)
+        {
+            throw new Exception($"Stable with ID '{command.Id}' not found.");
+        }
+
+        try
+        {
+            // Deletes the stable from the repository and saves changes
+            stableRepository.Remove(stable);
+            await unitOfWork.CompleteAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return stable;
+    }
 }

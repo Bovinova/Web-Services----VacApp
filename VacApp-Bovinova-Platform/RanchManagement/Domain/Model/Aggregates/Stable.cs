@@ -37,4 +37,16 @@ public class Stable
         Limit = command.Limit;
         Name = command.Name;
     }
+    
+    //Update
+    public void Update(UpdateStableCommand command)
+    {
+        if (command.Limit <= 0)
+        {
+            throw new ArgumentException("Limit must be greater than 0");
+        }
+        
+        Limit = command.Limit;
+        Name = command.Name;
+    }
 }
