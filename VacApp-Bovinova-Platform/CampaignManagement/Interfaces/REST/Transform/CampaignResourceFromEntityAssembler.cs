@@ -6,5 +6,5 @@ namespace VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Transform;
 public class CampaignResourceFromEntityAssembler
 {
     public static CampaignResource ToResourceFromEntity(Campaign campaign) =>
-    new CampaignResource(campaign.Id, campaign.Name, campaign.Description, campaign.StartDate, campaign.EndDate, campaign.Status);
+    new CampaignResource(campaign.Id, campaign.Name, campaign.Description, campaign.StartDate, campaign.EndDate, campaign.Status, campaign.Goal);
 }

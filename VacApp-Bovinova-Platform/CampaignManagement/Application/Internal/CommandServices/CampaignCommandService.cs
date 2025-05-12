@@ -60,4 +60,20 @@ public class CampaignCommandService(ICampaignRepository campaignRepository, IUni
             return null;
         }
     }
+
+    public async Task<Campaign?> Handle(AddGoalToCampaignCommand command)
+    {
+        var campaign = await campaignRepository.FindByIdAsync(command.CampaignId);
+        campaign.AddGoal(command.Goal);
+        try
+        {
+            await unitOfWork.CompleteAsync();
+            return campaign;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return null;
+        }
+    }
 }

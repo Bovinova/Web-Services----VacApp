@@ -1,3 +1,5 @@
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
+
 namespace VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Commands;
 
 public record CreateCampaignCommand(
@@ -5,5 +7,6 @@ public record CreateCampaignCommand(
     string Description,
     DateTime StartDate,
     DateTime EndDate,
-    string Status
+    string Status,
+    Goal Goal
     );

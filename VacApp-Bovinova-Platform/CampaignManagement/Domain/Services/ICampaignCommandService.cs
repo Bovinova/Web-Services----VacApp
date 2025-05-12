@@ -10,4 +10,6 @@ public interface ICampaignCommandService
     Task<IEnumerable<Campaign>> Handle(DeleteCampaignCommand command);
 
     Task<Campaign?> Handle(UpdateCampaignStatusCommand command);
+
+    Task<Campaign?> Handle(AddGoalToCampaignCommand command);
 }

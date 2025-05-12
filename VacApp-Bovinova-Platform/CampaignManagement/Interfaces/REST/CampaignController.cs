@@ -60,4 +60,14 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         var resourceFromEntity = CampaignResourceFromEntityAssembler.ToResourceFromEntity(result);
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
     }
+    
+    [HttpPut("{id}/add-goal")]
+    public async Task<ActionResult> AddGoalToCampaign([FromRoute] int id, [FromBody] AddGoalToCampaignResource resource)
+    {
+        var addGoalToCampaignCommand = AddGoalToCampaignFromResourceAssembler.ToCommandFromResource(resource, id);
+        var result = await campaignCommandService.Handle(addGoalToCampaignCommand);
+        if (result is null) return BadRequest();
+        var resourceFromEntity = CampaignResourceFromEntityAssembler.ToResourceFromEntity(result);
+        return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
+    }
 }

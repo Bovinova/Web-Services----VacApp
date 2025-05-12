@@ -10,6 +10,8 @@ public class Campaign
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
     public string Status { get; private set; }
+    
+    public Goal Goal { get; private set; }
 
     protected Campaign()
     {
@@ -18,6 +20,7 @@ public class Campaign
         this.StartDate = DateTime.Now;
         this.EndDate = DateTime.Now;
         this.Status = string.Empty;
+        this.Goal = new Goal();
     }
 
     public Campaign(CreateCampaignCommand command)
@@ -27,11 +30,17 @@ public class Campaign
         this.StartDate = command.StartDate;
         this.EndDate = command.EndDate;
         this.Status = command.Status;
+        this.Goal = command.Goal;
     }
     
     public void UpdateStatus(string status)
     {
         this.Status = status;
+    }
+
+    public void AddGoal(Goal goal)
+    {
+        this.Goal = goal;    
     }
     
 }
