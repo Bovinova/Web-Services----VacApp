@@ -51,7 +51,7 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         return Ok(resources);
     }
 
-    [HttpPut("{id}/update-status")]
+    [HttpPatch("{id}/update-status")]
     public async Task<ActionResult> UpdateCampaignStatus([FromRoute] int id, [FromBody] UpdateCampaignStatusResource resource)
     {
         var updateCampaignStatusCommand = UpdateCampaignStatusFromResourceAssembler.ToCommandFromResource(resource, id);
@@ -61,7 +61,7 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
     }
     
-    [HttpPut("{id}/add-goal")]
+    [HttpPatch("{id}/add-goal")]
     public async Task<ActionResult> AddGoalToCampaign([FromRoute] int id, [FromBody] AddGoalToCampaignResource resource)
     {
         var addGoalToCampaignCommand = AddGoalToCampaignFromResourceAssembler.ToCommandFromResource(resource, id);
@@ -69,5 +69,35 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         if (result is null) return BadRequest();
         var resourceFromEntity = CampaignResourceFromEntityAssembler.ToResourceFromEntity(result);
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
+    }
+    
+    [HttpPatch("{id}/add-channel")]
+    public async Task<ActionResult> AddChannelToCampaign([FromRoute] int id, [FromBody] AddChannelToCampaignResource resource)
+    {
+        var addChannelToCampaignCommand = AddChannelToCampaignFromResourceAssembler.ToCommandFromResource(resource, id);
+        var result = await campaignCommandService.Handle(addChannelToCampaignCommand);
+        if (result is null) return BadRequest();
+        var resourceFromEntity = CampaignResourceFromEntityAssembler.ToResourceFromEntity(result);
+        return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
+    }
+    
+    [HttpGet("{id}/goals")]
+    public async Task<ActionResult> GetGoalsFromCampaign([FromRoute] int id)
+    {
+        var getGoalsFromCampaignIdQuery = new GetGoalsFromCampaignIdQuery(id);
+        var result = await campaignQueryService.Handle(getGoalsFromCampaignIdQuery);
+        if (result is null) return NotFound();
+        var resources = result.Select(GoalResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(resources);
+    }
+    
+    [HttpGet("{id}/channels")]
+    public async Task<ActionResult> GetChannelsFromCampaign([FromRoute] int id)
+    {
+        var getChannelsFromCampaignIdQuery = new GetChannelsFromCampaignIdQuery(id);
+        var result = await campaignQueryService.Handle(getChannelsFromCampaignIdQuery);
+        if (result is null) return NotFound();
+        var resources = result.Select(ChannelResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(resources);
     }
 }

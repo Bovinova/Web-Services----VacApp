@@ -6,9 +6,18 @@ public class Channel
     public string Type { get; set; }
     public string Details { get; set; }
     
-    protected Channel()
+    public int CampaignId { get; private set; }
+    
+    public Channel()
     {
         this.Type = string.Empty;
         this.Details = string.Empty;
+    }
+    
+    public Channel(string Type, string Details, int campaignId) 
+    {
+        this.Type = Type;
+        this.Details = Details;
+        this.CampaignId = campaignId;       
     }
 }

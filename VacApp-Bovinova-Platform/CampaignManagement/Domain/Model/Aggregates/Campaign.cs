@@ -11,7 +11,10 @@ public class Campaign
     public DateTime EndDate { get; private set; }
     public string Status { get; private set; }
     
-    public Goal Goal { get; private set; }
+    public ICollection<Goal> Goals { get; private set; }
+    
+    public int GoalId { get; private set; }
+    public ICollection<Channel> Channels { get; private set; }
 
     protected Campaign()
     {
@@ -20,7 +23,10 @@ public class Campaign
         this.StartDate = DateTime.Now;
         this.EndDate = DateTime.Now;
         this.Status = string.Empty;
-        this.Goal = new Goal();
+        this.Goals = new List<Goal>();
+        this.Channels = new List<Channel>();
+        
+        //this.Channel = new Channel();      
     }
 
     public Campaign(CreateCampaignCommand command)
@@ -30,7 +36,8 @@ public class Campaign
         this.StartDate = command.StartDate;
         this.EndDate = command.EndDate;
         this.Status = command.Status;
-        this.Goal = command.Goal;
+        this.Goals = command.Goals;
+        this.Channels = command.Channel;   
     }
     
     public void UpdateStatus(string status)
@@ -40,7 +47,15 @@ public class Campaign
 
     public void AddGoal(Goal goal)
     {
-        this.Goal = goal;    
+        //Goal _goal = new Goal(goal.Description, goal.Metric, goal.TargetValue, goal.CurrentValue);
+        //this.Goal.UpdateValues(goal.Description, goal.Metric, goal.TargetValue, goal.CurrentValue);  
+        //this.Goal.UpdateValues(description, metric, targetValue, currentValue);
+        this.Goals.Add(goal);
+    }
+    
+    public void AddChannel(Channel channel)
+    {
+        this.Channels.Add(channel);
     }
     
 }

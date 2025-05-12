@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Repositories;
@@ -64,7 +65,15 @@ public class CampaignCommandService(ICampaignRepository campaignRepository, IUni
     public async Task<Campaign?> Handle(AddGoalToCampaignCommand command)
     {
         var campaign = await campaignRepository.FindByIdAsync(command.CampaignId);
-        campaign.AddGoal(command.Goal);
+        //var goal = campaign.Goal;
+        //Console.WriteLine(goal);
+        //var campaign = await campaignRepository.FindByCampaignIdAndGoalId(command.CampaignId, command.Goal.Id);
+        if (campaign != null)
+        {
+            campaign.AddGoal(command.Goal);
+            await campaignRepository.SaveChangesAsync();
+        }
+       
         try
         {
             await unitOfWork.CompleteAsync();
@@ -75,5 +84,26 @@ public class CampaignCommandService(ICampaignRepository campaignRepository, IUni
             Console.WriteLine(e);
             return null;
         }
+    }
+
+    public async Task<Campaign?> Handle(AddChannelToCampaignCommand command)
+    {
+        var campaign = await campaignRepository.FindByIdAsync(command.CampaignId);
+        campaign.AddChannel(command.Channel);
+        try
+        {
+            await unitOfWork.CompleteAsync();
+            return campaign;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public Task<Goal?> Handle(UpdateGoalCommand command)
+    {
+        throw new NotImplementedException();
     }
 }

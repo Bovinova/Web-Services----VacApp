@@ -10,6 +10,8 @@ public class Goal
     public int TargetValue {get; private set;}
     public int CurrentValue { get; private set; }
     
+    public int CampaignId { get; private set; }
+    
     public Goal()
     {
         this.Description = string.Empty;
@@ -18,7 +20,16 @@ public class Goal
         this.CurrentValue = 0;
     }
 
-    public Goal(string description, string metric, int targetValue, int currentValue)
+    public Goal(string description, string metric, int targetValue, int currentValue, int campaignId)
+    {
+        this.Description = description;
+        this.Metric = metric;
+        this.TargetValue = targetValue;
+        this.CurrentValue = currentValue;   
+        this.CampaignId = campaignId;
+    }
+
+    public void UpdateValues(string description, string metric, int targetValue, int currentValue)
     {
         this.Description = description;
         this.Metric = metric;

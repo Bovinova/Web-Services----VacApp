@@ -6,6 +6,6 @@ namespace VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Transform;
 public class CreateCampaignCommandFromResourceAssembler
 {
     public static CreateCampaignCommand ToCommandFromResource(CreateCampaignResource resource) =>
-        new CreateCampaignCommand(resource.Name, resource.Description, resource.StartDate, resource.EndDate, resource.Status, resource.Goal);
+        new CreateCampaignCommand(resource.Name, resource.Description, resource.StartDate, resource.EndDate, resource.Status, resource.Goals, resource.Channels);
     
 }

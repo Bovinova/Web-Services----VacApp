@@ -55,6 +55,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Campaign>().Property(c=>c.StartDate).IsRequired();
         builder.Entity<Campaign>().Property(c=>c.EndDate).IsRequired();
         builder.Entity<Campaign>().Property(c => c.Status).IsRequired();
+       //builder.Entity<Campaign>().Property(c => c.Goal).IsRequired();
         /* ---------------------------------------------------------------------------------------------------------- * /
         /* ---------------------------------------------------------------------------------------------------------- * /*/
 

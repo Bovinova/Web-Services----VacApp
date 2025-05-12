@@ -9,4 +9,5 @@ public record CampaignResource(
     DateTime StartDate,
     DateTime EndDate,
     string Status,
-    Goal Goal);
+    ICollection<Goal> Goals,
+    ICollection<Channel> Channel);

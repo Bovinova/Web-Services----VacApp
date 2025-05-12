@@ -17,4 +17,14 @@ public class CampaignQueryService(ICampaignRepository campaignRepository)
     {
         return await campaignRepository.ListAsync();
     }
+
+    public async Task<IEnumerable<Goal>> Handle(GetGoalsFromCampaignIdQuery query)
+    {
+        return await campaignRepository.FindByCampaignId(query.CampaignId);
+    }
+
+    public async Task<IEnumerable<Channel>> Handle(GetChannelsFromCampaignIdQuery query)
+    {
+        return await campaignRepository.FindChannelsByCampaignId(query.CampaignId);
+    }
 }

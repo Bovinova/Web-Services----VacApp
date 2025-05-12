@@ -8,5 +8,6 @@ public record CreateCampaignResource(
     DateTime StartDate,
     DateTime EndDate,
     string Status,
-    Goal Goal
+    List<Goal> Goals,
+    List<Channel> Channels
     );
