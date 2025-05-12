@@ -3,9 +3,7 @@ using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 
-public interface IVaccineRepository : IBaseRepository<Vaccine>
+public interface IStableRepository : IBaseRepository<Stable>
 {
-    Task<Vaccine?> FindByNameAsync(string name);
-    
-    Task<IEnumerable<Vaccine>> FindByBovineIdAsync(int? bovineId);
+    Task<Stable?> FindByNameAsync(string name);
 }

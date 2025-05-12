@@ -1,6 +1,6 @@
-namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Resources;
+namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 
-public record BovineResource(int Id,
+public record UpdateBovineCommand(int Id,
     string Name,
     string Gender,
     DateTime? BirthDate,

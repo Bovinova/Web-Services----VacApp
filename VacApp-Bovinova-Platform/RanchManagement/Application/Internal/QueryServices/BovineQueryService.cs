@@ -17,7 +17,6 @@ public class BovineQueryService(IBovineRepository bovineRepository) : IBovineQue
         return await bovineRepository.ListAsync();
     }
     
-    
     /// <summary>
     /// Retrieves a Bovine entity by its unique identifier.
     /// </summary>
@@ -27,4 +26,16 @@ public class BovineQueryService(IBovineRepository bovineRepository) : IBovineQue
     {
         return await bovineRepository.FindByIdAsync(query.Id);
     }
+    
+    /// <summary>
+    /// Retrieves all bovines by stable ID.
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns> A collection of bovines associated with the specified stable ID. </returns>
+    public async Task<IEnumerable<Bovine>> Handle(GetBovinesByStableIdQuery query)
+    {
+        return await bovineRepository.FindByStableIdAsync(query.StableId);
+    }
+    
+    
 }

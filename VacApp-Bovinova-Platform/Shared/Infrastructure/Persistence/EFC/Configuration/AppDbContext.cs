@@ -20,7 +20,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         /* Ranch Management BC -------------------------------------------------------------------------------------- */
         //Bovine
-        
         builder.Entity<Bovine>().HasKey(f => f.Id);
         builder.Entity<Bovine>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Bovine>().Property(f => f.Name).IsRequired();
@@ -29,9 +28,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Bovine>().Property(f => f.Breed).IsRequired();
         builder.Entity<Bovine>().Property(f => f.Location).IsRequired();
         builder.Entity<Bovine>().Property(f => f.BovineImg).IsRequired();
+        builder.Entity<Bovine>().Property(f => f.StableId).IsRequired();
         
         //Vaccine
-        
         builder.Entity<Vaccine>().HasKey(f => f.Id);
         builder.Entity<Vaccine>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Vaccine>().Property(f => f.Name).IsRequired();
@@ -39,6 +38,12 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Vaccine>().Property(f => f.VaccineDate).IsRequired();
         builder.Entity<Vaccine>().Property(f => f.VaccineImg).IsRequired();
         builder.Entity<Vaccine>().Property(f => f.BovineId).IsRequired();
+        
+        //Stable
+        builder.Entity<Stable>().HasKey(f => f.Id);
+        builder.Entity<Stable>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Stable>().Property(f => f.Limit).IsRequired();
+        
         
         /* ---------------------------------------------------------------------------------------------------------- */
         

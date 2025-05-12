@@ -33,4 +33,68 @@ public class VaccineCommandService(IVaccineRepository vaccineRepository,
 
         return vaccine;
     }
+    
+    /// <summary>
+    /// Handles the update of an existing vaccine entity.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<Vaccine?> Handle(UpdateVaccineCommand command)
+    {
+        // Verifies if the vaccine exists
+        var vaccine = await vaccineRepository.FindByIdAsync(command.Id);
+        if (vaccine == null)
+        {
+            throw new Exception($"Vaccine with ID '{command.Id}' not found.");
+        }
+
+        // Updates the vaccine entity
+        vaccine.Update(command);
+
+        try
+        {
+            // Updates the vaccine in the repository and saves changes
+            vaccineRepository.Update(vaccine);
+            await unitOfWork.CompleteAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return vaccine;
+    }
+    
+    
+    /// <summary>
+    /// Handles the deletion of an existing vaccine entity.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<Vaccine?> Handle(DeleteVaccineCommand command)
+    {
+        // Verifies if the vaccine exists
+        var vaccine = await vaccineRepository.FindByIdAsync(command.Id);
+        if (vaccine == null)
+        {
+            throw new Exception($"Vaccine with ID '{command.Id}' not found.");
+        }
+
+        try
+        {
+            // Deletes the vaccine from the repository and saves changes
+            vaccineRepository.Remove(vaccine);
+            await unitOfWork.CompleteAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return vaccine;
+    }
 }

@@ -13,7 +13,8 @@ public class CreateBovineCommandFromResourceAssembler
             resource.BirthDate,
             resource.Breed,
             resource.Location,
-            resource.BovineImg
+            resource.BovineImg,
+            resource.StableId
         );
     }
 }
