@@ -8,6 +8,11 @@ using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Interfaces.ASAP.Configuration;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Repositories;
+using VacApp_Bovinova_Platform.StaffAdministration.Application.Internal.CommandServices;
+using VacApp_Bovinova_Platform.StaffAdministration.Application.Internal.QueryServices;
+using VacApp_Bovinova_Platform.StaffAdministration.Domain.Repositories;
+using VacApp_Bovinova_Platform.StaffAdministration.Domain.Services;
+using VacApp_Bovinova_Platform.StaffAdministration.Infrastructure.Persistence.EFC.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +73,11 @@ builder.Services.AddScoped<IVaccineCommandService, VaccineCommandService>();
 builder.Services.AddScoped<IStableRepository, StableRepository>();
 builder.Services.AddScoped<IStableQueryService, StableQueryService>();
 builder.Services.AddScoped<IStableCommandService, StableCommandService>();
+
+//Staff Administration BC
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IStaffQueryService, StaffQueryService>();
+builder.Services.AddScoped<IStaffCommandService, StaffCommandService>();
 
 /////////////////////////End Database Configuration/////////////////////////
 var app = builder.Build();

@@ -2,6 +2,7 @@ using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
 using Microsoft.EntityFrameworkCore;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Aggregates;
 
 namespace VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 
@@ -46,6 +47,32 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         
         /* ---------------------------------------------------------------------------------------------------------- */
+        
+        /* Staff Administration BC -------------------------------------------------------------------------------------- */
+        //Staff
+        builder.Entity<Staff>().HasKey(f => f.Id);
+        builder.Entity<Staff>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Staff>().Property(f => f.Name).IsRequired();
+
+        builder.Entity<Staff>()
+            .OwnsOne(f => f.EmployeeStatus, navigationBuilder =>
+            {
+                navigationBuilder.WithOwner().HasForeignKey("Id");
+                navigationBuilder.Property(f => f.Value)
+                    .IsRequired()
+                    .HasColumnName("employee_status");
+            });
+        
+        builder.Entity<Staff>()
+            .OwnsOne(f => f.CampaignId, navigationBuilder =>
+            {
+                navigationBuilder.WithOwner().HasForeignKey("Id");
+                navigationBuilder.Property(f => f.CampaignIdentifier)
+                    .IsRequired()
+                    .HasColumnName("campaign_id");
+            });
+        /*builder.Entity<Staff>().Property(f => f.CampaignId).IsRequired();*/
+        
         
         builder.UseSnakeCaseNamingConvention();
     }
