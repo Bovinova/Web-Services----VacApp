@@ -4,7 +4,7 @@ using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Repositories;
 
-namespace VacApp_Bovinova_Platform.RanchManagement.Infrastructure.Repositories;
+namespace VacApp_Bovinova_Platform.RanchManagement.Infrastructure.Persistence.EFC.Repositories;
 
 public class StableRepository(AppDbContext ctx)
     : BaseRepository<Stable>(ctx), IStableRepository

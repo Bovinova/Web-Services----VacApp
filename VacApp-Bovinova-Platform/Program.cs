@@ -3,7 +3,7 @@ using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServi
 using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.QueryServices;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
-using VacApp_Bovinova_Platform.RanchManagement.Infrastructure.Repositories;
+using VacApp_Bovinova_Platform.RanchManagement.Infrastructure.Persistence.EFC.Repositories;
 using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Interfaces.ASAP.Configuration;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
