@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Aggregates;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
 
 namespace VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 
@@ -21,6 +22,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         /* Ranch Management BC -------------------------------------------------------------------------------------- */
         //Bovine
+        
         builder.Entity<Bovine>().HasKey(f => f.Id);
         builder.Entity<Bovine>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Bovine>().Property(f => f.Name).IsRequired();
@@ -32,6 +34,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Bovine>().Property(f => f.StableId).IsRequired();
         
         //Vaccine
+        
         builder.Entity<Vaccine>().HasKey(f => f.Id);
         builder.Entity<Vaccine>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Vaccine>().Property(f => f.Name).IsRequired();
@@ -45,9 +48,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Stable>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Stable>().Property(f => f.Limit).IsRequired();
         
-        
         /* ---------------------------------------------------------------------------------------------------------- */
-        
         /* Staff Administration BC -------------------------------------------------------------------------------------- */
         //Staff
         builder.Entity<Staff>().HasKey(f => f.Id);
@@ -72,7 +73,20 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
                     .HasColumnName("campaign_id");
             });
         /*builder.Entity<Staff>().Property(f => f.CampaignId).IsRequired();*/
+
+        /* ---------------------------------------------------------------------------------------------------------- */
+        /* Campaign Management BC -------------------------------------------------------------------------------------- */
         
+        builder.Entity<Campaign>().HasKey(c=>c.Id);
+        builder.Entity<Campaign>().Property(c=>c.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Campaign>().Property(c=>c.Name).IsRequired();
+        builder.Entity<Campaign>().Property(c=>c.Description).IsRequired();
+        builder.Entity<Campaign>().Property(c=>c.StartDate).IsRequired();
+        builder.Entity<Campaign>().Property(c=>c.EndDate).IsRequired();
+        builder.Entity<Campaign>().Property(c => c.Status).IsRequired();
+        //builder.Entity<Campaign>().Property(c => c.Goal).IsRequired();
+        /* ---------------------------------------------------------------------------------------------------------- * /
+        /* ---------------------------------------------------------------------------------------------------------- * /*/
         
         builder.UseSnakeCaseNamingConvention();
     }
