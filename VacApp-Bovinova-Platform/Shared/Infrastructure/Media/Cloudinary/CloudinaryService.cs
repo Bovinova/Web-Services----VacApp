@@ -17,6 +17,23 @@ namespace VacApp_Bovinova_Platform.Shared.Infrastructure.Media.Cloudinary
             cloudinary.Api.Secure = true;
         }
 
+        public void UpdateFileAsync(string url, Stream fileData)
+        {
+            var uri = new Uri(url);
+            var segments = uri.AbsolutePath.Split('/');
+            var fileWithExt = segments.Last();
+            var publicId = Path.GetFileNameWithoutExtension(fileWithExt);
+
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new CloudinarySdk.FileDescription("temp", fileData),
+                PublicId = publicId,
+                Overwrite = true,
+                Format = "webp"
+            };
+            cloudinary.Upload(uploadParams);
+        }
+
         public string UploadFileAsync(string fileName, Stream fileData)
         {
             var uploadParams = new ImageUploadParams()
