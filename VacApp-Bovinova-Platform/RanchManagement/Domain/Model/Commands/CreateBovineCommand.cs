@@ -7,4 +7,5 @@ public record CreateBovineCommand(
     string? Breed,
     string? Location,
     string? BovineImg,
-    int? StableId);
+    int? StableId,
+    Stream fileData);

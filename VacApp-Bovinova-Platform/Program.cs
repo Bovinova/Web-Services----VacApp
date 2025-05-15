@@ -3,7 +3,6 @@ using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServi
 using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.QueryServices;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
-using VacApp_Bovinova_Platform.RanchManagement.Infrastructure.Repositories;
 using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Interfaces.ASAP.Configuration;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -18,6 +17,9 @@ using VacApp_Bovinova_Platform.CampaignManagement.Application.Internal.QueryServ
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
 using VacApp_Bovinova_Platform.CampaignManagement.Infrastructure.Repositories;
+using VacApp_Bovinova_Platform.RanchManagement.Infrastructure.Persistence.EFC.Repositories;
+using VacApp_Bovinova_Platform.Shared.Infrastructure.Media.Cloudinary;
+using VacApp_Bovinova_Platform.Shared.Application.OutboundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +65,7 @@ else if (builder.Environment.IsProduction())
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IMediaStorageService, CloudinaryService>();
 
 // Bounded Context Injection Configuration for Business
 
