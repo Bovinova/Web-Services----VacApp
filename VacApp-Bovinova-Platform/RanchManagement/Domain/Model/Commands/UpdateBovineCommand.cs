@@ -6,5 +6,5 @@ public record UpdateBovineCommand(int Id,
     DateTime? BirthDate,
     string? Breed,
     string? Location,
-    string? BovineImg,
-    int? StableId);
+    int? StableId,
+    Stream fileData);

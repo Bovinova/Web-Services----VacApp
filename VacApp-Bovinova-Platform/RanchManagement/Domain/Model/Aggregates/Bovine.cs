@@ -11,21 +11,21 @@ public class Bovine
     /// </summary>
     [Required]
     public int Id { get; private set; }
-    
+
     /// <summary>
     /// Name of the Bovine
     /// </summary>
     [Required]
     [StringLength(100)]
     public string Name { get; private set; }
-    
+
     /// <summary>
     /// Gender of the Bovine (Male or Female)
     /// </summary>
     [Required]
     [StringLength(100)]
     public string Gender { get; private set; }
-    
+
     /// <summary>
     /// Date of Birth of the Bovine
     /// </summary>
@@ -45,7 +45,7 @@ public class Bovine
     [Required]
     [StringLength(100)]
     public string? Location { get; private set; }
-    
+
     /// <summary>
     /// Stable Identifier As Foreign Key
     /// </summary>
@@ -56,7 +56,7 @@ public class Bovine
     /// </summary>
     [ForeignKey(nameof(StableId))]
     public Stable? Stable { get; private set; }
-    
+
     /// <summary>
     /// Bovine Image
     /// </summary>
@@ -70,13 +70,8 @@ public class Bovine
     // Constructor with parameters
     public Bovine(CreateBovineCommand command)
     {
-        if (command.Gender != "male" &&
-            command.Gender != "Male" &&
-            command.Gender != "female" &&
-            command.Gender != "Female")
-        {
+        if (!command.Gender.ToLower().Equals("male") && !command.Gender.ToLower().Equals("female"))
             throw new ArgumentException("Gender must be either 'male' or 'female'");
-        }
 
         Name = command.Name;
         Gender = command.Gender;
@@ -86,24 +81,18 @@ public class Bovine
         BovineImg = command.BovineImg;
         StableId = command.StableId;
     }
-    
+
     //Update Bovine
     public void Update(UpdateBovineCommand command)
     {
-        if (command.Gender != "male" &&
-            command.Gender != "Male" &&
-            command.Gender != "female" &&
-            command.Gender != "Female")
-        {
+        if (!command.Gender.ToLower().Equals("male") && !command.Gender.ToLower().Equals("female"))
             throw new ArgumentException("Gender must be either 'male' or 'female'");
-        }
 
         Name = command.Name;
         Gender = command.Gender;
         BirthDate = command.BirthDate;
         Breed = command.Breed;
         Location = command.Location;
-        BovineImg = command.BovineImg;
         StableId = command.StableId;
     }
 }

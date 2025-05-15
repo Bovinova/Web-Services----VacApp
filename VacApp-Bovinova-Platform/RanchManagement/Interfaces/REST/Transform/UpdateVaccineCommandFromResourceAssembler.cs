@@ -13,8 +13,9 @@ public class UpdateVaccineCommandFromResourceAssembler
             Name: resource.Name,
             VaccineType: resource.VaccineType,
             VaccineDate: resource.VaccineDate,
-            VaccineImg: resource.VaccineImg,
-            BovineId: resource.BovineId
+            VaccineImg: string.Empty,
+            BovineId: resource.BovineId,
+            fileData: resource.fileData.OpenReadStream()
         );
     }
 }

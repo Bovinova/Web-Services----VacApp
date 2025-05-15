@@ -11,34 +11,34 @@ public class Vaccine
     /// </summary>
     [Required]
     public int Id { get; private set; }
-    
+
     /// <summary>
     /// Name of the Vaccine
     /// </summary>
     [Required]
     [StringLength(100)]
     public string Name { get; private set; }
-    
+
     /// <summary>
     /// Vaccine Type
     /// </summary>
     [Required]
     [StringLength(100)]
     public string? VaccineType { get; private set; }
-    
+
     /// <summary>
     /// Date of the Vaccination
     /// </summary>
     [Required]
     public DateTime? VaccineDate { get; private set; }
-    
+
     /// <summary>
     /// Vaccine Image
     /// </summary>
     [Required]
     [StringLength(300)]
     public string? VaccineImg { get; private set; }
-    
+
     /// <summary>
     /// Bovine Identifier As Foreign Key
     /// </summary>
@@ -49,7 +49,7 @@ public class Vaccine
     /// </summary>
     [ForeignKey(nameof(BovineId))]
     public Bovine? Bovine { get; private set; }
-    
+
     // Default constructor for EF Core
     private Vaccine() { }
 
@@ -62,14 +62,13 @@ public class Vaccine
         VaccineImg = command.VaccineImg;
         BovineId = command.BovineId;
     }
-    
+
     //Update
     public void Update(UpdateVaccineCommand command)
     {
         Name = command.Name;
         VaccineType = command.VaccineType;
         VaccineDate = command.VaccineDate;
-        VaccineImg = command.VaccineImg;
         BovineId = command.BovineId;
     }
 }
