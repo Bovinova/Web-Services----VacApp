@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
@@ -12,11 +13,12 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST;
 /// <summary>
 /// API controller for managing bovines
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("/api/v1/bovines")]
 [Produces(MediaTypeNames.Application.Json)]
-[Tags ("Bovines")]
-public class BovineController(IBovineCommandService commandService, 
+[Tags("Bovines")]
+public class BovineController(IBovineCommandService commandService,
     IBovineQueryService queryService) : ControllerBase
 {
     /// <summary>
@@ -30,7 +32,7 @@ public class BovineController(IBovineCommandService commandService,
         var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
-    
+
         return CreatedAtAction(nameof(GetBovineById), new { id = result.Id },
             BovineResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
@@ -51,7 +53,7 @@ public class BovineController(IBovineCommandService commandService,
         var bovineResources = bovines.Select(BovineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(bovineResources);
     }
-    
+
     /// <summary>
     /// Gets a bovine by its ID.
     /// </summary>
@@ -66,7 +68,7 @@ public class BovineController(IBovineCommandService commandService,
         var resources = BovineResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
     }
-    
+
     /// <summary>
     /// Gets all bovines by stable ID.
     /// </summary>
@@ -82,13 +84,13 @@ public class BovineController(IBovineCommandService commandService,
         var getBovinesByStableIdQuery = new GetBovinesByStableIdQuery(stableId);
         var bovines = await queryService.Handle(getBovinesByStableIdQuery);
 
-        if (bovines == null || !bovines.Any()) 
+        if (bovines == null || !bovines.Any())
             return NotFound();
 
         var bovineResources = bovines.Select(BovineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(bovineResources);
     }
-    
+
     /// <summary>
     /// Updates a bovine by its ID.
     /// </summary>
@@ -104,7 +106,7 @@ public class BovineController(IBovineCommandService commandService,
 
         return Ok(BovineResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
-    
+
     /// <summary>
     /// Deletes a bovine by its ID.
     /// </summary>
@@ -179,7 +181,7 @@ public class VaccineController(
         var resources = VaccineResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
     }
-    
+
     /// <summary>
     /// Gets all vaccines by bovine ID.
     /// </summary>
@@ -195,13 +197,13 @@ public class VaccineController(
         var getVaccinesByBovineIdQuery = new GetVaccinesByBovineIdQuery(bovineId);
         var vaccines = await queryService.Handle(getVaccinesByBovineIdQuery);
 
-        if (vaccines == null || !vaccines.Any()) 
+        if (vaccines == null || !vaccines.Any())
             return NotFound();
 
         var vaccineResources = vaccines.Select(VaccineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(vaccineResources);
     }
-    
+
     /// <summary>
     /// Updates a vaccine by its ID.
     /// </summary>
@@ -217,7 +219,7 @@ public class VaccineController(
 
         return Ok(VaccineResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
-    
+
     /// <summary>
     /// Deletes a vaccine by its ID.
     /// </summary>
@@ -232,7 +234,7 @@ public class VaccineController(
 
         return NoContent();
     }
-    
+
 }
 
 /// <summary>
@@ -279,7 +281,7 @@ public class StableController(
         var resources = StableResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
     }
-    
+
     /// <summary>
     /// Updates a stable by its ID.
     /// </summary>
@@ -295,7 +297,7 @@ public class StableController(
 
         return Ok(StableResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
-    
+
     /// <summary>
     /// Deletes a stable by its ID.
     /// </summary>
@@ -310,4 +312,4 @@ public class StableController(
 
         return NoContent();
     }
-} 
+}

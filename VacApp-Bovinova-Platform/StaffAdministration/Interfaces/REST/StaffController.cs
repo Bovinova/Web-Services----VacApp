@@ -6,17 +6,19 @@ using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Services;
 using VacApp_Bovinova_Platform.StaffAdministration.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.StaffAdministration.Interfaces.REST.Transform;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace VacApp_Bovinova_Platform.StaffAdministration.Interfaces.REST;
 
 /// <summary>
 /// API controller for managing staffs
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("/api/v1/staff")]
 [Produces(MediaTypeNames.Application.Json)]
-[Tags ("Staffs")]
-public class StaffController(IStaffCommandService commandService, 
+[Tags("Staffs")]
+public class StaffController(IStaffCommandService commandService,
     IStaffQueryService queryService) : ControllerBase
 {
     /// <summary>
@@ -30,7 +32,7 @@ public class StaffController(IStaffCommandService commandService,
         var command = CreateStaffCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
-    
+
         return CreatedAtAction(nameof(GetStaffById), new { id = result.Id },
             StaffResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
@@ -51,7 +53,7 @@ public class StaffController(IStaffCommandService commandService,
         var staffResources = staffs.Select(StaffResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(staffResources);
     }
-    
+
     /// <summary>
     /// Gets a staff by its ID.
     /// </summary>
@@ -66,7 +68,7 @@ public class StaffController(IStaffCommandService commandService,
         var resources = StaffResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
     }
-    
+
     /// <summary>
     /// Gets all staffs by campaign ID.
     /// </summary>
@@ -82,13 +84,13 @@ public class StaffController(IStaffCommandService commandService,
         var getStaffByCampaignIdQuery = new GetStaffByCampaignIdQuery(campaignId);
         var staffs = await queryService.Handle(getStaffByCampaignIdQuery);
 
-        if (staffs == null || !staffs.Any()) 
+        if (staffs == null || !staffs.Any())
             return NotFound();
 
         var staffResources = staffs.Select(StaffResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(staffResources);
     }
-    
+
     /// <summary>
     /// Gets all staffs by employee status.
     /// </summary>
@@ -104,13 +106,13 @@ public class StaffController(IStaffCommandService commandService,
         var getStaffByEmployeeStatusQuery = new GetStaffByEmployeeStatusQuery(employeeStatus);
         var staffs = await queryService.Handle(getStaffByEmployeeStatusQuery);
 
-        if (staffs == null || !staffs.Any()) 
+        if (staffs == null || !staffs.Any())
             return NotFound();
 
         var staffResources = staffs.Select(StaffResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(staffResources);
     }
-    
+
     /// <summary>
     /// Gets a staff by its name.
     /// </summary>
@@ -130,7 +132,7 @@ public class StaffController(IStaffCommandService commandService,
         var resources = StaffResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resources);
     }
-    
+
     /// <summary>
     /// Updates a staff by its ID.
     /// </summary>
@@ -146,7 +148,7 @@ public class StaffController(IStaffCommandService commandService,
 
         return Ok(StaffResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
-    
+
     /// <summary>
     /// Deletes a staff by its ID.
     /// </summary>

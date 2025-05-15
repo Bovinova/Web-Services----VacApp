@@ -6,14 +6,16 @@ using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
 using VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Transform;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 public class CampaignController(ICampaignCommandService campaignCommandService, ICampaignQueryService campaignQueryService)
-    :ControllerBase
+    : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult> CreateCampaign([FromBody] CreateCampaignResource resource)
@@ -42,9 +44,9 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         var campaignResources = campaigns.Select(CampaignResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(campaignResources);
     }
-    
+
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteCampaign([FromRoute]int id)
+    public async Task<ActionResult> DeleteCampaign([FromRoute] int id)
     {
         var campaigns = await campaignCommandService.Handle(new DeleteCampaignCommand(id));
         var resources = campaigns.Select(CampaignResourceFromEntityAssembler.ToResourceFromEntity);
@@ -60,7 +62,7 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         var resourceFromEntity = CampaignResourceFromEntityAssembler.ToResourceFromEntity(result);
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
     }
-    
+
     [HttpPatch("{id}/add-goal")]
     public async Task<ActionResult> AddGoalToCampaign([FromRoute] int id, [FromBody] AddGoalToCampaignResource resource)
     {
@@ -70,7 +72,7 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         var resourceFromEntity = CampaignResourceFromEntityAssembler.ToResourceFromEntity(result);
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
     }
-    
+
     [HttpPatch("{id}/add-channel")]
     public async Task<ActionResult> AddChannelToCampaign([FromRoute] int id, [FromBody] AddChannelToCampaignResource resource)
     {
@@ -80,7 +82,7 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         var resourceFromEntity = CampaignResourceFromEntityAssembler.ToResourceFromEntity(result);
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id }, resourceFromEntity);
     }
-    
+
     [HttpGet("{id}/goals")]
     public async Task<ActionResult> GetGoalsFromCampaign([FromRoute] int id)
     {
@@ -90,7 +92,7 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
         var resources = result.Select(GoalResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(resources);
     }
-    
+
     [HttpGet("{id}/channels")]
     public async Task<ActionResult> GetChannelsFromCampaign([FromRoute] int id)
     {
