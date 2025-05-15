@@ -13,7 +13,7 @@ public class CreateVaccineCommandFromResourceAssembler
             resource.VaccineDate,
             string.Empty,
             resource.BovineId,
-            resource.fileData.OpenReadStream()
+            resource.fileData?.OpenReadStream() ?? null
         );
     }
 }
