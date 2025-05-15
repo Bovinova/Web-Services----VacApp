@@ -45,12 +45,18 @@ public class BovineCommandService(IBovineRepository bovineRepository,
         {
             throw new Exception($"Bovine entity with name '{command.Name}' already exists.");
         }
-
-        var bovineImg = mediaStorageService.UploadFileAsync(command.Name, command.fileData);
-        var commandWithImg = command with { BovineImg = bovineImg };
-
         // Creates a new bovine entity
-        bovine = new Bovine(commandWithImg);
+        if (command.fileData is not null)
+        {
+            var bovineImg = mediaStorageService.UploadFileAsync(command.Name, command.fileData);
+            var commandWithImg = command with { BovineImg = bovineImg };
+            bovine = new Bovine(commandWithImg);
+        }
+        else
+        {
+            var commandWithImg = command with { BovineImg = "https://placehold.co/600x400" };
+            bovine = new Bovine(commandWithImg);
+        }
 
         try
         {

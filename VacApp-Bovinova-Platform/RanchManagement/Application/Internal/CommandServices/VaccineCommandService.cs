@@ -21,10 +21,17 @@ public class VaccineCommandService(
             throw new Exception($"Vaccine entity with name '{command.Name}' already exists.");
 
         // Create a new Vaccine entity from the command data
-        var vaccineImg = mediaStorageService.UploadFileAsync(command.Name, command.fileData);
-        var commandWithImg = command with { VaccineImg = vaccineImg };
-
-        vaccine = new Vaccine(commandWithImg);
+        if (command.fileData is not null)
+        {
+            var vaccineImg = mediaStorageService.UploadFileAsync(command.Name, command.fileData);
+            var commandWithImg = command with { VaccineImg = vaccineImg };
+            vaccine = new Vaccine(commandWithImg);
+        }
+        else
+        {
+            var commandWithImg = command with { VaccineImg = "https://placehold.co/600x400" };
+            vaccine = new Vaccine(commandWithImg);
+        }
 
         try
         {

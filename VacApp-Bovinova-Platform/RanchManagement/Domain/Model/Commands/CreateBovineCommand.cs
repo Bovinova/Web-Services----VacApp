@@ -8,4 +8,4 @@ public record CreateBovineCommand(
     string? Location,
     string? BovineImg,
     int? StableId,
-    Stream fileData);
+    Stream? fileData);
