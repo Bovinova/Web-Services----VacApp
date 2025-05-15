@@ -2,11 +2,14 @@ using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
+using VacApp_Bovinova_Platform.Shared.Application.OutboundServices;
 using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServices;
 
-public class VaccineCommandService(IVaccineRepository vaccineRepository,
+public class VaccineCommandService(
+    IVaccineRepository vaccineRepository,
+    IMediaStorageService mediaStorageService,
     IUnitOfWork unitOfWork) : IVaccineCommandService
 {
     public async Task<Vaccine?> Handle(CreateVaccineCommand command)
@@ -16,8 +19,12 @@ public class VaccineCommandService(IVaccineRepository vaccineRepository,
             await vaccineRepository.FindByNameAsync(command.Name);
         if (vaccine != null)
             throw new Exception($"Vaccine entity with name '{command.Name}' already exists.");
+
         // Create a new Vaccine entity from the command data
-        vaccine = new Vaccine(command);
+        var vaccineImg = mediaStorageService.UploadFileAsync(command.Name, command.fileData);
+        var commandWithImg = command with { VaccineImg = vaccineImg };
+
+        vaccine = new Vaccine(commandWithImg);
 
         try
         {
@@ -33,7 +40,7 @@ public class VaccineCommandService(IVaccineRepository vaccineRepository,
 
         return vaccine;
     }
-    
+
     /// <summary>
     /// Handles the update of an existing vaccine entity.
     /// </summary>
@@ -50,6 +57,9 @@ public class VaccineCommandService(IVaccineRepository vaccineRepository,
         }
 
         // Updates the vaccine entity
+        if (command.fileData is not null)
+            mediaStorageService.UpdateFileAsync(vaccine.VaccineImg, command.fileData);
+
         vaccine.Update(command);
 
         try
@@ -66,8 +76,8 @@ public class VaccineCommandService(IVaccineRepository vaccineRepository,
 
         return vaccine;
     }
-    
-    
+
+
     /// <summary>
     /// Handles the deletion of an existing vaccine entity.
     /// </summary>

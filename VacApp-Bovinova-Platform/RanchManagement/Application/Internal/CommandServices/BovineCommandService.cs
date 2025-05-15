@@ -83,6 +83,10 @@ public class BovineCommandService(IBovineRepository bovineRepository,
         }
 
         // Updates the bovine entity
+
+        if (command.fileData is not null)
+            mediaStorageService.UpdateFileAsync(bovine.BovineImg, command.fileData);
+
         bovine.Update(command);
 
         try

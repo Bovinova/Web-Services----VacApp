@@ -99,7 +99,8 @@ public class BovineController(IBovineCommandService commandService,
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateBovine(int id, [FromBody] UpdateBovineResource resource)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UpdateBovine(int id, [FromForm] UpdateBovineResource resource)
     {
         var command = UpdateBovineCommandFromResourceAssembler.ToCommandFromResource(id, resource);
         var result = await commandService.Handle(command);
@@ -127,13 +128,14 @@ public class BovineController(IBovineCommandService commandService,
 /// <summary>
 /// API controller for managing vaccines
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("/api/v1/vaccines")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Vaccines")]
 public class VaccineController(
-    IVaccineCommandService commandService,
-    IVaccineQueryService queryService) : ControllerBase
+   IVaccineCommandService commandService,
+   IVaccineQueryService queryService) : ControllerBase
 {
     /// <summary>
     /// Posts a new vaccine to the system.
@@ -141,7 +143,8 @@ public class VaccineController(
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> CreateVaccines([FromBody] CreateVaccineResource resource)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> CreateVaccines([FromForm] CreateVaccineResource resource)
     {
         var command = CreateVaccineCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await commandService.Handle(command);
@@ -212,7 +215,8 @@ public class VaccineController(
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateVaccine(int id, [FromBody] UpdateVaccineResource resource)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UpdateVaccine(int id, [FromForm] UpdateVaccineResource resource)
     {
         var command = UpdateVaccineCommandFromResourceAssembler.ToCommandFromResource(id, resource);
         var result = await commandService.Handle(command);
@@ -241,13 +245,14 @@ public class VaccineController(
 /// <summary>
 /// API controller for managing stables
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("/api/v1/stables")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Stables")]
 public class StableController(
-    IStableCommandService commandService,
-    IStableQueryService queryService) : ControllerBase
+   IStableCommandService commandService,
+   IStableQueryService queryService) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateStables([FromBody] CreateStableResource resource)

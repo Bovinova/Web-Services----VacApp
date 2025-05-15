@@ -4,5 +4,5 @@ public record UpdateVaccineCommand(int Id,
     string Name,
     string? VaccineType,
     DateTime? VaccineDate,
-    string? VaccineImg, 
-    int BovineId);
+    int BovineId,
+    Stream fileData);
