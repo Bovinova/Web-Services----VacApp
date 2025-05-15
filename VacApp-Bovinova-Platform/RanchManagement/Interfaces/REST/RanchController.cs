@@ -27,7 +27,8 @@ public class BovineController(IBovineCommandService commandService,
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> CreateBovines([FromBody] CreateBovineResource resource)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> CreateBovines([FromForm] CreateBovineResource resource)
     {
         var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await commandService.Handle(command);
