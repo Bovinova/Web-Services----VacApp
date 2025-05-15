@@ -2,12 +2,14 @@ using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
+using VacApp_Bovinova_Platform.Shared.Application.OutboundServices;
 using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServices;
 
-public class BovineCommandService(IBovineRepository bovineRepository, 
+public class BovineCommandService(IBovineRepository bovineRepository,
     IStableRepository stableRepository,
+    IMediaStorageService mediaStorageService,
     IUnitOfWork unitOfWork) : IBovineCommandService
 {
     /// <summary>
@@ -44,8 +46,11 @@ public class BovineCommandService(IBovineRepository bovineRepository,
             throw new Exception($"Bovine entity with name '{command.Name}' already exists.");
         }
 
+        var bovineImg = mediaStorageService.UploadFileAsync(command.Name, command.fileData);
+        var commandWithImg = command with { BovineImg = bovineImg };
+
         // Creates a new bovine entity
-        bovine = new Bovine(command);
+        bovine = new Bovine(commandWithImg);
 
         try
         {
@@ -61,7 +66,7 @@ public class BovineCommandService(IBovineRepository bovineRepository,
 
         return bovine;
     }
-    
+
     /// <summary>
     /// Handles the update of an existing bovine entity.
     /// </summary>
@@ -94,8 +99,8 @@ public class BovineCommandService(IBovineRepository bovineRepository,
 
         return bovine;
     }
-    
-    
+
+
     /// <summary>
     /// Handles the deletion of an existing bovine entity.
     /// </summary>
