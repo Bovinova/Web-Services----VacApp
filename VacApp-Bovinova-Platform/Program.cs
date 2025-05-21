@@ -31,6 +31,9 @@ using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Extensions
 using VacApp_Bovinova_Platform.IAM.Application.QueryServices;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Media.Cloudinary;
 using VacApp_Bovinova_Platform.Shared.Application.OutboundServices;
+using dotenv.net;
+
+DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,7 +81,14 @@ builder.Services.AddSwaggerGen(
 
 /////////////////////////Begin Database Configuration/////////////////////////
 // Add DbContext
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
+var dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE");
+var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+
+var connectionString = $"server={dbServer};database={dbDatabase};user={dbUser};password={dbPassword};";
+
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Verify Database Connection string
 if (connectionString is null)
@@ -163,7 +173,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
