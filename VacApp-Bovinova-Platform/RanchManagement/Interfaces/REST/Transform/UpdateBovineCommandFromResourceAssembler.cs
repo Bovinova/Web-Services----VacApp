@@ -16,7 +16,7 @@ public class UpdateBovineCommandFromResourceAssembler
             Breed: resource?.Breed,
             Location: resource?.Location,
             StableId: resource?.StableId,
-            fileData: resource?.fileData?.OpenReadStream() ?? null
+            FileData: resource?.fileData?.OpenReadStream() ?? null
         );
     }
 }

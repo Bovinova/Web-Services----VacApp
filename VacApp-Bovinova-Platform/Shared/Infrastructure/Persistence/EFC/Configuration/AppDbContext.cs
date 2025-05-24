@@ -62,7 +62,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Staff>().HasKey(f => f.Id);
         builder.Entity<Staff>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Staff>().Property(f => f.Name).IsRequired();
-
         builder.Entity<Staff>()
             .OwnsOne(f => f.EmployeeStatus, navigationBuilder =>
             {
@@ -71,7 +70,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
                     .IsRequired()
                     .HasColumnName("employee_status");
             });
-
         builder.Entity<Staff>()
             .OwnsOne(f => f.CampaignId, navigationBuilder =>
             {
@@ -93,6 +91,14 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Campaign>().Property(c => c.EndDate).IsRequired();
         builder.Entity<Campaign>().Property(c => c.Status).IsRequired();
         //builder.Entity<Campaign>().Property(c => c.Goal).IsRequired();
+        builder.Entity<Campaign>()
+            .OwnsOne(f => f.StableId, navigationBuilder =>
+            {
+                navigationBuilder.WithOwner().HasForeignKey("Id");
+                navigationBuilder.Property(f => f.StableIdentifier)
+                    .IsRequired()
+                    .HasColumnName("stable_id");
+            });
         /* ---------------------------------------------------------------------------------------------------------- * /
         /* ---------------------------------------------------------------------------------------------------------- * /*/
 

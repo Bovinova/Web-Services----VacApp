@@ -65,7 +65,17 @@ public class Bovine
     public string? BovineImg { get; private set; }
 
     // Default constructor for EF Core
-    private Bovine() { }
+    public Bovine(string name, string gender, DateTime? birthDate, string? breed, string? location, string? bovineImg,
+        int? stableId)
+    {
+        Name = name;
+        Gender = gender;
+        BirthDate = birthDate;
+        Breed = breed;
+        Location = location;
+        BovineImg = bovineImg;
+        StableId = stableId;
+    }
 
     // Constructor with parameters
     public Bovine(CreateBovineCommand command)

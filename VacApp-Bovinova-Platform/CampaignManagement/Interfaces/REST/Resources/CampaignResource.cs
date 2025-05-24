@@ -10,4 +10,5 @@ public record CampaignResource(
     DateTime EndDate,
     string Status,
     ICollection<Goal> Goals,
-    ICollection<Channel> Channel);
+    ICollection<Channel> Channel,
+    int StableId);

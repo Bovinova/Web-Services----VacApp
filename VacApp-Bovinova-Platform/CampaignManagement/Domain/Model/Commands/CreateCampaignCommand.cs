@@ -9,5 +9,6 @@ public record CreateCampaignCommand(
     DateTime EndDate,
     string Status,
     List<Goal> Goals,
-    List<Channel> Channel
+    List<Channel> Channel,
+    int StableId
     );

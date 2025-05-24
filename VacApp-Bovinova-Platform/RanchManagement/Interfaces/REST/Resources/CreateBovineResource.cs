@@ -8,4 +8,4 @@ public record CreateBovineResource(string Name,
     string? Breed,
     string? Location,
     int? StableId,
-    IFormFile? fileData);
+    IFormFile? FileData);

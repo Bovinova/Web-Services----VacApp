@@ -1,4 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Commands;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.ValueObjects;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 
 namespace VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
 
@@ -10,11 +14,11 @@ public class Campaign
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
     public string Status { get; private set; }
-    
     public ICollection<Goal> Goals { get; private set; }
-    
     public int GoalId { get; private set; }
     public ICollection<Channel> Channels { get; private set; }
+    public StableId StableId { get; private set; }
+    
 
     protected Campaign()
     {
@@ -25,8 +29,29 @@ public class Campaign
         this.Status = string.Empty;
         this.Goals = new List<Goal>();
         this.Channels = new List<Channel>();
+        this.StableId = new StableId();
         
         //this.Channel = new Channel();      
+    }
+    
+    public Campaign(
+        string name, 
+        string description, 
+        DateTime startDate, 
+        DateTime endDate, 
+        string status, 
+        ICollection<Goal> goals, 
+        ICollection<Channel> channels, 
+        int stableId)
+    {
+        this.Name = name;
+        this.Description = description;
+        this.StartDate = startDate;
+        this.EndDate = endDate;
+        this.Status = status;
+        this.Goals = goals;
+        this.Channels = channels;
+        this.StableId = new StableId(stableId);
     }
 
     public Campaign(CreateCampaignCommand command)
@@ -37,7 +62,8 @@ public class Campaign
         this.EndDate = command.EndDate;
         this.Status = command.Status;
         this.Goals = command.Goals;
-        this.Channels = command.Channel;   
+        this.Channels = command.Channel;
+        this.StableId = new StableId(command.StableId);
     }
     
     public void UpdateStatus(string status)

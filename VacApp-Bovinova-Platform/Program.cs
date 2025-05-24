@@ -81,14 +81,16 @@ builder.Services.AddSwaggerGen(
 
 /////////////////////////Begin Database Configuration/////////////////////////
 // Add DbContext
+
+/*
 var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
 var dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE");
 var dbUser = Environment.GetEnvironmentVariable("DB_USER");
 var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
-var connectionString = $"server={dbServer};database={dbDatabase};user={dbUser};password={dbPassword};";
+var connectionString = $"server={dbServer};database={dbDatabase};user={dbUser};password={dbPassword};";*/
 
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Verify Database Connection string
 if (connectionString is null)

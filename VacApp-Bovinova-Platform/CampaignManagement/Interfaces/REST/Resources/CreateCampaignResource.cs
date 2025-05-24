@@ -9,5 +9,6 @@ public record CreateCampaignResource(
     DateTime EndDate,
     string Status,
     List<Goal> Goals,
-    List<Channel> Channels
+    List<Channel> Channels,
+    int StableId
     );
