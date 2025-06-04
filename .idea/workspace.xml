@@ -5,34 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5866382b-7e9c-43a1-abab-010c62711b72" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/CommandServices/StableCommandService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/QueryServices/StableQueryService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Stable.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateStableCommand.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Queries/GetAllStablesQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Queries/GetBovinesByStableIdQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Queries/GetStablesByIdQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Repositories/IStableRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IStableCommandService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IStableQueryService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Repositories/StableRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/CreateStableResource.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/StableResource.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateStableCommandFromResourceAssembler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/StableResourceFromEntityAssembler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Queries/GetAllUsersQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Queries/GetUserByEmailQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Queries/GetUserByNameQuery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/.env.example" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/CommandServices/UserCommandService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/CommandServices/UserCommandService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/QueryServices/UserQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/QueryServices/UserQueryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Commands/SignInCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Commands/SignInCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Repositories/IUserRepostory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Repositories/IUserRepostory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IUserQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IUserQueryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Repositories/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Repositories/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/SignInResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/SignInResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/SignInCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/SignInCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserResourceFromEntityAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserResourceFromEntityAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/QueryServices/BovineQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/QueryServices/BovineQueryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/CommandServices/BovineCommandService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/CommandServices/BovineCommandService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/CommandServices/VaccineCommandService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/CommandServices/VaccineCommandService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Bovine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Bovine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Vaccine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Vaccine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateBovineCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateBovineCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Repositories/IBovineRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Repositories/IBovineRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IBovineQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IBovineQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Repositories/BovineRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Repositories/BovineRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/RanchController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/RanchController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/BovineResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/BovineResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateVaccineCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateVaccineCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/UpdateBovineCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/UpdateBovineCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/UpdateVaccineCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/UpdateVaccineCommand.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/CreateBovineResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/CreateBovineResource.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/BovineResourceFromEntityAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/BovineResourceFromEntityAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/CreateVaccineResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/CreateVaccineResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/UpdateBovineResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/UpdateBovineResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/UpdateVaccineResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/UpdateVaccineResource.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateBovineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateBovineCommandFromResourceAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Infrastructure/Persistence/EFC/Configuration/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Infrastructure/Persistence/EFC/Configuration/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateVaccineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateVaccineCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateBovineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateBovineCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateVaccineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateVaccineCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Application/OutboundServices/IMediaStorageService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Infrastructure/Media/Cloudinary/CloudinaryService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/VacApp-Bovinova-Platform.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/VacApp-Bovinova-Platform.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +65,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/CampaignManagement/Interfaces/REST/Transform/CampaignResourceFromEntityAssembler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/CommandServices/BovineCommandService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/CommandServices/StableCommandService.cs" root0="SKIP_HIGHLIGHTING" />
@@ -81,8 +92,6 @@
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IStableCommandService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IStableQueryService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IVaccineQueryService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Repositories/BovineRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Repositories/StableRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/RanchController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/BovineResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Resources/CreateBovineResource.cs" root0="SKIP_HIGHLIGHTING" />
@@ -106,19 +115,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/Ranch-Management&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feature/Development-oscar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "settings.sync",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -129,6 +138,7 @@
       <updated>1746657310832</updated>
       <workItem from="1746657312887" duration="3282000" />
       <workItem from="1746660653208" duration="1431000" />
+      <workItem from="1749057154348" duration="1816000" />
     </task>
     <servers />
   </component>

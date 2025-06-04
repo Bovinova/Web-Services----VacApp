@@ -5,5 +5,4 @@ public record CreateVaccineCommand(
     string? VaccineType,
     DateTime? VaccineDate,
     string? VaccineImg,
-    int BovineId,
-    Stream? fileData);
+    int BovineId);

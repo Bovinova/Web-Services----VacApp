@@ -18,5 +18,4 @@ public class UpdateBovineResource
     public string? Breed { get; set; }
     public string? Location { get; set; }
     public int? StableId { get; set; }
-    public IFormFile? fileData { get; set; }
 }

@@ -13,9 +13,8 @@ public class CreateBovineCommandFromResourceAssembler
             resource.BirthDate,
             resource.Breed,
             resource.Location,
-            string.Empty,
-            resource.StableId,
-            resource.FileData?.OpenReadStream() ?? null
+            resource.BovineImg,
+            resource.StableId
         );
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
@@ -63,17 +64,19 @@ public class Bovine
     [Required]
     [StringLength(300)]
     public string? BovineImg { get; private set; }
-
+    private static readonly Regex ImageUrlRegex = new(@"^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$", RegexOptions.IgnoreCase);
+    
     // Default constructor for EF Core
-    public Bovine(string name, string gender, DateTime? birthDate, string? breed, string? location, string? bovineImg,
-        int? stableId)
+    private Bovine() { }
+    
+    public Bovine(string name, string gender, DateTime? birthDate, string? breed, string? location, string? bovineImg, int? stableId)
     {
         Name = name;
         Gender = gender;
         BirthDate = birthDate;
         Breed = breed;
         Location = location;
-        BovineImg = bovineImg;
+        BovineImg = ValidateImageUrl(bovineImg);
         StableId = stableId;
     }
 
@@ -82,13 +85,13 @@ public class Bovine
     {
         if (!command.Gender.ToLower().Equals("male") && !command.Gender.ToLower().Equals("female"))
             throw new ArgumentException("Gender must be either 'male' or 'female'");
-
+        
         Name = command.Name;
         Gender = command.Gender;
         BirthDate = command.BirthDate;
         Breed = command.Breed;
         Location = command.Location;
-        BovineImg = command.BovineImg;
+        BovineImg = ValidateImageUrl(command.BovineImg);
         StableId = command.StableId;
     }
 
@@ -104,5 +107,14 @@ public class Bovine
         Breed = command.Breed;
         Location = command.Location;
         StableId = command.StableId;
+    }
+    
+    private static string ValidateImageUrl(string? imageUrl)
+    {
+        if (string.IsNullOrWhiteSpace(imageUrl) || !ImageUrlRegex.IsMatch(imageUrl))
+        {
+            throw new ArgumentException("The image URL must be a valid link to an image file.");
+        }
+        return imageUrl;
     }
 }

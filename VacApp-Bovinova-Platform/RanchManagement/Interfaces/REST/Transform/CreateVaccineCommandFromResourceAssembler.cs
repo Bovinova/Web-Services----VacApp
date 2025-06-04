@@ -11,9 +11,8 @@ public class CreateVaccineCommandFromResourceAssembler
             resource.Name,
             resource.VaccineType,
             resource.VaccineDate,
-            string.Empty,
-            resource.BovineId,
-            resource.fileData?.OpenReadStream() ?? null
+            resource.VaccineImg,
+            resource.BovineId
         );
     }
 }

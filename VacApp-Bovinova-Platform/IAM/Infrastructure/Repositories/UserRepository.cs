@@ -12,5 +12,15 @@ namespace VacApp_Bovinova_Platform.IAM.Infrastructure.Repositories
         {
             return await context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
         }
+        
+        public async Task<User?> FindByNameAsync(string name)
+        {
+            return await context.Set<User>().FirstOrDefaultAsync(u => u.Username == name);
+        }
+        
+        public async Task<IEnumerable<User>> FindAllAsync()
+        {
+            return await context.Set<User>().ToListAsync();
+        }
     }
 }

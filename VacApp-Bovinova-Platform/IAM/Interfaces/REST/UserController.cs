@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.IAM.Domain.Services;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
@@ -13,7 +14,8 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
     [Route("api/v1/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     [Tags("User")]
-    public class UserController(IUserCommandService commandService) : ControllerBase
+    public class UserController(IUserCommandService commandService,
+        IUserQueryService queryService) : ControllerBase
     {
         [HttpPost("sign-up")]
         [AllowAnonymous]
@@ -24,7 +26,7 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
 
             if (result is null) return BadRequest("User already exists");
 
-            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result);
+            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result, resource.Username, resource.Email);
 
             return CreatedAtAction(nameof(SignUp), userResource);
         }
@@ -33,12 +35,25 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         [AllowAnonymous]
         public async Task<ActionResult> SignIn([FromBody] SignInResource resource)
         {
+            if (string.IsNullOrEmpty(resource.Email) && string.IsNullOrEmpty(resource.UserName))
+            {
+                return BadRequest("Either Email or UserName must be provided.");
+            }
+
             var command = SignInCommandFromResourceAssembler.ToCommandFromResource(resource);
             var result = await commandService.Handle(command);
 
             if (result is null) return BadRequest("Invalid credentials.");
 
-            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result);
+            var userName = !string.IsNullOrEmpty(resource.UserName)
+                ? resource.UserName
+                : await queryService.GetUserNameByEmail(resource.Email!);
+            /*
+            var email = !string.IsNullOrEmpty(resource.Email)
+                ? resource.Email
+                : await queryService.GetEmailByUserName(resource.UserName!);*/
+
+            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result, userName,  resource.Email ?? string.Empty);
 
             return Ok(userResource);
         }

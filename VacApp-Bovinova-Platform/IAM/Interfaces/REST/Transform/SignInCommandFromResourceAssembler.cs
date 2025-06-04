@@ -9,6 +9,7 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform
         {
             return new SignInCommand(
                 resource.Email,
+                resource.UserName,
                 resource.Password
             );
         }

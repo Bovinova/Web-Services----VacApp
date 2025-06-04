@@ -29,8 +29,6 @@ using VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.JWT.Configuration;
 using Microsoft.OpenApi.Models;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Extensions;
 using VacApp_Bovinova_Platform.IAM.Application.QueryServices;
-using VacApp_Bovinova_Platform.Shared.Infrastructure.Media.Cloudinary;
-using VacApp_Bovinova_Platform.Shared.Application.OutboundServices;
 using dotenv.net;
 
 DotEnv.Load();
@@ -127,7 +125,6 @@ builder.Services.AddCors(options =>
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IMediaStorageService, CloudinaryService>();
 
 // Bounded Context Injection Configuration for Business
 

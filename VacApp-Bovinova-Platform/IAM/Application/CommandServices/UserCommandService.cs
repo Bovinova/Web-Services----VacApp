@@ -39,7 +39,16 @@ namespace VacApp_Bovinova_Platform.IAM.Application.CommandServices
 
         public async Task<string> Handle(SignInCommand command)
         {
-            var user = await userRepository.FindByEmailAsync(command.Email);
+            User? user = null;
+
+            if (!string.IsNullOrEmpty(command.Email))
+            {
+                user = await userRepository.FindByEmailAsync(command.Email);
+            }
+            else if (!string.IsNullOrEmpty(command.UserName))
+            {
+                user = await userRepository.FindByNameAsync(command.UserName);
+            }
 
             if (user == null || !hashingService.VerifyHash(command.Password, user.Password))
                 throw new Exception("Invalid username or password");
