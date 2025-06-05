@@ -27,7 +27,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<User>().Property(f => f.Username).IsRequired();
         builder.Entity<User>().Property(f => f.Password).IsRequired();
         builder.Entity<User>().Property(f => f.Email).IsRequired();
-
+        builder.Entity<User>().Property(f => f.EmailConfirmed).IsRequired();
+        
         /* Ranch Management BC -------------------------------------------------------------------------------------- */
         //Bovine
 

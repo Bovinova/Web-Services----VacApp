@@ -22,5 +22,11 @@ namespace VacApp_Bovinova_Platform.IAM.Infrastructure.Repositories
         {
             return await context.Set<User>().ToListAsync();
         }
+        
+        public async Task UpdateAsync(User user)
+        {
+            context.Set<User>().Update(user);
+            await context.SaveChangesAsync();
+        }
     }
 }

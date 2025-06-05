@@ -27,4 +27,8 @@
       <Folder Include="Shared\Application\OutboundServices\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Include="IAM\Infrastructure\Mailing\.Net\Services\EmailService.cs" />
+    </ItemGroup>
+
 </Project>

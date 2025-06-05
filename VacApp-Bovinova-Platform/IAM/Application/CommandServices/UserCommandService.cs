@@ -55,5 +55,19 @@ namespace VacApp_Bovinova_Platform.IAM.Application.CommandServices
 
             return tokenService.GenerateToken(user);
         }
+        
+        public async Task UpdateUserAsync(User user)
+        {
+            try
+            {
+                await userRepository.UpdateAsync(user); // Update the user in the repository
+                await unitOfWork.CompleteAsync(); // Confirm the changes
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error updating user: {e.Message}");
+                throw;
+            }
+        }
     }
 }

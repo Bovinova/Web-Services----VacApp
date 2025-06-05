@@ -34,5 +34,11 @@ namespace VacApp_Bovinova_Platform.IAM.Application.QueryServices
             var user = await userRepository.FindByEmailAsync(email);
             return user?.Username;
         }
+        
+        public async Task<string?> GetEmailByUserName(string userName)
+        {
+            var user = await userRepository.FindByNameAsync(userName);
+            return user?.Email;
+        }
     }
 }

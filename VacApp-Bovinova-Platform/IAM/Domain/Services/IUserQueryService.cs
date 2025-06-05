@@ -11,6 +11,7 @@ namespace VacApp_Bovinova_Platform.IAM.Domain.Services
         Task<User?> Handle(GetUserByEmailQuery query);
         Task<User?> Handle(GetUserByNameQuery query);
         Task<string?> GetUserNameByEmail(string email);
+        Task<string?> GetEmailByUserName(string userName);
 
     }
 }
