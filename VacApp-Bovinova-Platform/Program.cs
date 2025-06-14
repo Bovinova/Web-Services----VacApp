@@ -1,3 +1,6 @@
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServices;
 using VacApp_Bovinova_Platform.RanchManagement.Application.Internal.QueryServices;
@@ -30,6 +33,14 @@ using Microsoft.OpenApi.Models;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Extensions;
 using VacApp_Bovinova_Platform.IAM.Application.QueryServices;
 using dotenv.net;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Google.Services;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Google.TokenHandler;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.Google.Services;
 
 DotEnv.Load();
 
@@ -78,15 +89,6 @@ builder.Services.AddSwaggerGen(
     });
 
 /////////////////////////Begin Database Configuration/////////////////////////
-// Add DbContext
-
-/*
-var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
-var dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE");
-var dbUser = Environment.GetEnvironmentVariable("DB_USER");
-var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-
-var connectionString = $"server={dbServer};database={dbDatabase};user={dbUser};password={dbPassword};";*/
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -133,8 +135,41 @@ builder.Services.AddScoped<IUserRepostory, UserRepository>();
 builder.Services.AddScoped<IUserCommandService, UserCommandService>();
 builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<IGoogleAuthHelper, GoogleAuthHelperService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+
+// Configuración correcta de autenticación
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; // "Bearer"
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenSettings:Secret"]!)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
+        };
+    })
+    .AddScheme<AuthenticationSchemeOptions, GoogleAccessTokenAuthenticationHandler>(
+        Constant.Scheme, null)
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Google:ClientSecret"]!;
+        options.CallbackPath = $"/{builder.Configuration["Google:RedirectUrl"]}";
+    });
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<IGoogleAuthHelper, GoogleAuthHelperService>();
+builder.Services.AddScoped<IGoogleAuthorization, GoogleAuthorizationService>();
 
 //Ranch Management BC
 builder.Services.AddScoped<IBovineRepository, BovineRepository>();
@@ -180,10 +215,11 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 
 app.UseCors("AllowAllPolicy");
 
-// Add Authorization Middleware to Pipeline
-app.UseRequestAuthorization();
+//app.UseRequestAuthorization();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

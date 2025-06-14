@@ -1,16 +1,13 @@
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using VacApp_Bovinova_Platform.IAM.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.IAM.Domain.Services;
-using VacApp_Bovinova_Platform.IAM.Infrastructure.Mailing.Net.Services;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
-using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
-
 
 namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
 {
-    [Authorize]
+    [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/v1/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
@@ -18,8 +15,9 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
     public class UserController(IUserCommandService commandService,
         IUserQueryService queryService) : ControllerBase
     {
+        
         [HttpPost("sign-up")]
-        [AllowAnonymous]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody] SignUpResource resource)
         {
             var command = SignUpCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -28,28 +26,12 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             if (result is null) return BadRequest("User already exists");
 
             var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result, resource.Username, resource.Email);
-
-            // Generate confirmation link
-            var confirmationLink = Url.Action(
-                "ConfirmEmail",
-                "User",
-                new { email = resource.Email },
-                Request.Scheme
-            );
-
-            // Send confirmation email
-            var emailService = new EmailService("smtp.gmail.com", 587, resource.Email, "ampy reif ewbd lvhg");
-            await emailService.SendEmailAsync(
-                resource.Email,
-                "Register Confirmation",
-                $"Hello {resource.Username}, please confirm your email by clicking the next link: {confirmationLink}"
-            );
             
             return CreatedAtAction(nameof(SignUp), userResource);
         }
 
         [HttpPost("sign-in")]
-        [AllowAnonymous]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         public async Task<ActionResult> SignIn([FromBody] SignInResource resource)
         {
             if (string.IsNullOrEmpty(resource.Email) && string.IsNullOrEmpty(resource.UserName))
@@ -73,28 +55,6 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result, userName, email);
 
             return Ok(userResource);
-        }
-        
-        [HttpGet("confirm-email")]
-        [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string email)
-        {
-            var user = await queryService.Handle(new GetUserByEmailQuery(email));
-
-            if (user is null)
-            {
-                return NotFound("User not found.");
-            }
-
-            if (user.EmailConfirmed)
-            {
-                return BadRequest("Email is already confirmed.");
-            }
-
-            user.EmailConfirmed = true;
-            await commandService.UpdateUserAsync(user); // Method to update the user in the database
-
-            return Ok($"Email {email} confirmed.");
         }
     }
 }

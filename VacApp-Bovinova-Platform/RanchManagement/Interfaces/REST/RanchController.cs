@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
@@ -13,7 +14,7 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST;
 /// <summary>
 /// API controller for managing bovines
 /// </summary>
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("/api/v1/bovines")]
 [Produces(MediaTypeNames.Application.Json)]

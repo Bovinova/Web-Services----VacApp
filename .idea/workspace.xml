@@ -5,20 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5866382b-7e9c-43a1-abab-010c62711b72" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Mailing/.Net/Services/EmailService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/CommandServices/UserCommandService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/CommandServices/UserCommandService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/QueryServices/UserQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/QueryServices/UserQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Aggregates/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Aggregates/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Repositories/IUserRepostory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Repositories/IUserRepostory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IUserCommandService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IUserCommandService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IUserQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IUserQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Repositories/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Repositories/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResource.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserResourceFromEntityAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserResourceFromEntityAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Infrastructure/Persistence/EFC/Configuration/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Infrastructure/Persistence/EFC/Configuration/AppDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/VacApp-Bovinova-Platform.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/VacApp-Bovinova-Platform.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Mailing/.Net/Services/EmailService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
