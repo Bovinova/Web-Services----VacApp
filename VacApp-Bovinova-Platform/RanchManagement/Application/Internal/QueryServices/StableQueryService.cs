@@ -14,9 +14,9 @@ public class StableQueryService(IStableRepository stableRepository) : IStableQue
     /// <returns></returns>
     public async Task<IEnumerable<Stable>> Handle(GetAllStablesQuery query)
     {
-        return await stableRepository.ListAsync();
+        return await stableRepository.FindByUserIdAsync(query.UserId);
     }
-    
+
     /// <summary>
     /// Retrieves a Stable entity by its unique identifier.
     /// </summary>

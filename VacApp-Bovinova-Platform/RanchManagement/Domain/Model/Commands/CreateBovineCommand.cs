@@ -8,4 +8,5 @@ public record CreateBovineCommand(
     string? Location,
     string? BovineImg,
     int? StableId,
-    Stream? FileData);
+    Stream? FileData,
+    int UserId);

@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
@@ -30,7 +31,8 @@ public class BovineController(IBovineCommandService commandService,
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateBovines([FromForm] CreateBovineResource resource)
     {
-        var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var user = (User?)HttpContext.Items["User"];
+        var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource, user.Id);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
 
@@ -50,7 +52,8 @@ public class BovineController(IBovineCommandService commandService,
     [SwaggerResponse(StatusCodes.Status200OK, "The list of bovines were found", typeof(IEnumerable<BovineResource>))]
     public async Task<IActionResult> GetAllBovine()
     {
-        var bovines = await queryService.Handle(new GetAllBovinesQuery());
+        var user = (User?)HttpContext.Items["User"];
+        var bovines = await queryService.Handle(new GetAllBovinesQuery(user.Id));
         var bovineResources = bovines.Select(BovineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(bovineResources);
     }
@@ -256,8 +259,11 @@ public class StableController(
 {
     [HttpPost]
     public async Task<IActionResult> CreateStables([FromBody] CreateStableResource resource)
+
     {
-        var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var user = (User?)HttpContext.Items["User"];
+        if (user is null) return Unauthorized("User not found.");
+        var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource, user.Id);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
 
@@ -273,7 +279,9 @@ public class StableController(
     [SwaggerResponse(StatusCodes.Status200OK, "The list of stables were found", typeof(IEnumerable<StableResource>))]
     public async Task<IActionResult> GetAllStable()
     {
-        var stables = await queryService.Handle(new GetAllStablesQuery());
+        var user = (User?)HttpContext.Items["User"];
+        if (user is null) return Unauthorized("User not found.");
+        var stables = await queryService.Handle(new GetAllStablesQuery(user.Id));
         var stableResources = stables.Select(StableResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(stableResources);
     }

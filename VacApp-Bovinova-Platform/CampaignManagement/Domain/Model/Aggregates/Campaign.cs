@@ -18,7 +18,7 @@ public class Campaign
     public int GoalId { get; private set; }
     public ICollection<Channel> Channels { get; private set; }
     public StableId StableId { get; private set; }
-    
+    public int UserId { get; private set; }
 
     protected Campaign()
     {
@@ -30,19 +30,20 @@ public class Campaign
         this.Goals = new List<Goal>();
         this.Channels = new List<Channel>();
         this.StableId = new StableId();
-        
+        this.UserId = 0;
         //this.Channel = new Channel();      
     }
-    
+
     public Campaign(
-        string name, 
-        string description, 
-        DateTime startDate, 
-        DateTime endDate, 
-        string status, 
-        ICollection<Goal> goals, 
-        ICollection<Channel> channels, 
-        int stableId)
+        string name,
+        string description,
+        DateTime startDate,
+        DateTime endDate,
+        string status,
+        ICollection<Goal> goals,
+        ICollection<Channel> channels,
+        int stableId,
+        int userId)
     {
         this.Name = name;
         this.Description = description;
@@ -52,6 +53,7 @@ public class Campaign
         this.Goals = goals;
         this.Channels = channels;
         this.StableId = new StableId(stableId);
+        this.UserId = userId;
     }
 
     public Campaign(CreateCampaignCommand command)
@@ -64,8 +66,9 @@ public class Campaign
         this.Goals = command.Goals;
         this.Channels = command.Channel;
         this.StableId = new StableId(command.StableId);
+        this.UserId = command.UserId;
     }
-    
+
     public void UpdateStatus(string status)
     {
         this.Status = status;
@@ -78,10 +81,10 @@ public class Campaign
         //this.Goal.UpdateValues(description, metric, targetValue, currentValue);
         this.Goals.Add(goal);
     }
-    
+
     public void AddChannel(Channel channel)
     {
         this.Channels.Add(channel);
     }
-    
+
 }

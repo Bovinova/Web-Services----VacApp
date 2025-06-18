@@ -6,4 +6,5 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 public interface IStableRepository : IBaseRepository<Stable>
 {
     Task<Stable?> FindByNameAsync(string name);
+    Task<IEnumerable<Stable>> FindByUserIdAsync(int userId);
 }

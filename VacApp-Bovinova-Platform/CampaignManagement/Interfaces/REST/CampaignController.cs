@@ -6,6 +6,7 @@ using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
 using VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Transform;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST;
@@ -20,7 +21,9 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
     [HttpPost]
     public async Task<ActionResult> CreateCampaign([FromBody] CreateCampaignResource resource)
     {
-        var createCampaignCommand = CreateCampaignCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var user = (User?)HttpContext.Items["User"];
+        if (user is null) return Unauthorized("User not found.");
+        var createCampaignCommand = CreateCampaignCommandFromResourceAssembler.ToCommandFromResource(resource, user.Id);
         var result = await campaignCommandService.Handle(createCampaignCommand);
         if (result is null) return BadRequest();
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id },
@@ -40,7 +43,9 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
     [HttpGet("all-campaigns")]
     public async Task<ActionResult> GetAllCampaigns()
     {
-        var campaigns = await campaignQueryService.Handle(new GetAllCampaignsQuery());
+        var user = (User?)HttpContext.Items["User"];
+        if (user is null) return Unauthorized("User not found.");
+        var campaigns = await campaignQueryService.Handle(new GetAllCampaignsQuery(user.Id));
         var campaignResources = campaigns.Select(CampaignResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(campaignResources);
     }

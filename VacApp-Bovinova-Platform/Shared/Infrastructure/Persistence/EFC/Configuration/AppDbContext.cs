@@ -40,6 +40,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Bovine>().Property(f => f.Location).IsRequired();
         builder.Entity<Bovine>().Property(f => f.BovineImg).IsRequired();
         builder.Entity<Bovine>().Property(f => f.StableId).IsRequired();
+        builder.Entity<Bovine>().Property(f => f.UserId).IsRequired();
 
         //Vaccine
 
@@ -55,6 +56,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Stable>().HasKey(f => f.Id);
         builder.Entity<Stable>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Stable>().Property(f => f.Limit).IsRequired();
+        builder.Entity<Stable>().Property(f => f.UserId).IsRequired();
 
         /* ---------------------------------------------------------------------------------------------------------- */
         /* Staff Administration BC -------------------------------------------------------------------------------------- */
@@ -90,6 +92,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Campaign>().Property(c => c.StartDate).IsRequired();
         builder.Entity<Campaign>().Property(c => c.EndDate).IsRequired();
         builder.Entity<Campaign>().Property(c => c.Status).IsRequired();
+        builder.Entity<Campaign>().Property(c => c.UserId).IsRequired();
         //builder.Entity<Campaign>().Property(c => c.Goal).IsRequired();
         builder.Entity<Campaign>()
             .OwnsOne(f => f.StableId, navigationBuilder =>

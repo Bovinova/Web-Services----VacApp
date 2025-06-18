@@ -64,9 +64,11 @@ public class Bovine
     [StringLength(300)]
     public string? BovineImg { get; private set; }
 
+    public int UserId { get; private set; }
+
     // Default constructor for EF Core
     public Bovine(string name, string gender, DateTime? birthDate, string? breed, string? location, string? bovineImg,
-        int? stableId)
+        int? stableId, int userId)
     {
         Name = name;
         Gender = gender;
@@ -75,6 +77,7 @@ public class Bovine
         Location = location;
         BovineImg = bovineImg;
         StableId = stableId;
+        UserId = userId;
     }
 
     // Constructor with parameters
@@ -90,6 +93,7 @@ public class Bovine
         Location = command.Location;
         BovineImg = command.BovineImg;
         StableId = command.StableId;
+        UserId = command.UserId;
     }
 
     //Update Bovine

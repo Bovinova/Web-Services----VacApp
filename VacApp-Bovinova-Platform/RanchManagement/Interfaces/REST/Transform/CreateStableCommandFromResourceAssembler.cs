@@ -5,11 +5,12 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Transform;
 
 public class CreateStableCommandFromResourceAssembler
 {
-    public static CreateStableCommand ToCommandFromResource(CreateStableResource resource)
+    public static CreateStableCommand ToCommandFromResource(CreateStableResource resource, int userId)
     {
         return new CreateStableCommand(
             resource.Name,
-            resource.Limit
+            resource.Limit,
+            userId
         );
     }
 }

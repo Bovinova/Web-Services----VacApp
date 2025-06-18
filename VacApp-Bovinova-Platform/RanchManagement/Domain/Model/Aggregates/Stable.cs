@@ -10,22 +10,24 @@ public class Stable
     /// </summary>
     [Required]
     public int Id { get; private set; }
-    
+
     /// <summary>
     /// Name of the Stable
     /// </summary>
     [Required]
     public string Name { get; private set; }
-    
+
     /// <summary>
     /// Max. Capacity of the Stable
     /// </summary>
     [Required]
     public int Limit { get; private set; }
-    
+
+    public int UserId { get; private set; }
+
     // Default constructor for EF Core
     private Stable() { }
-    
+
     // Constructor with parameters
     public Stable(CreateStableCommand command)
     {
@@ -33,11 +35,12 @@ public class Stable
         {
             throw new ArgumentException("Limit must be greater than 0");
         }
-        
+
         Limit = command.Limit;
         Name = command.Name;
+        UserId = command.UserId;
     }
-    
+
     //Update
     public void Update(UpdateStableCommand command)
     {
@@ -45,7 +48,7 @@ public class Stable
         {
             throw new ArgumentException("Limit must be greater than 0");
         }
-        
+
         Limit = command.Limit;
         Name = command.Name;
     }

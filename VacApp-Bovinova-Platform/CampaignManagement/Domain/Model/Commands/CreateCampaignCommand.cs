@@ -10,5 +10,6 @@ public record CreateCampaignCommand(
     string Status,
     List<Goal> Goals,
     List<Channel> Channel,
-    int StableId
+    int StableId,
+    int UserId
     );

@@ -5,7 +5,7 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Transform;
 
 public class CreateBovineCommandFromResourceAssembler
 {
-    public static CreateBovineCommand ToCommandFromResource(CreateBovineResource resource)
+    public static CreateBovineCommand ToCommandFromResource(CreateBovineResource resource, int userId)
     {
         return new CreateBovineCommand(
             resource.Name,
@@ -15,7 +15,8 @@ public class CreateBovineCommandFromResourceAssembler
             resource.Location,
             string.Empty,
             resource.StableId,
-            resource.FileData?.OpenReadStream() ?? null
+            resource.FileData?.OpenReadStream() ?? null,
+            userId
         );
     }
 }

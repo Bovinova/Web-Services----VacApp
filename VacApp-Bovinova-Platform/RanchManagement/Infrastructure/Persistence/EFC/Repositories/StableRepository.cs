@@ -11,6 +11,11 @@ public class StableRepository(AppDbContext ctx)
 {
     public async Task<Stable?> FindByNameAsync(string name)
     {
-        return await Context.Set<Stable>().FirstOrDefaultAsync(f=>f.Name == name);
+        return await Context.Set<Stable>().FirstOrDefaultAsync(f => f.Name == name);
+    }
+
+    public async Task<IEnumerable<Stable>> FindByUserIdAsync(int userId)
+    {
+        return await Context.Set<Stable>().Where(s => s.UserId == userId).ToListAsync();
     }
 }
