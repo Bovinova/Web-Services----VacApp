@@ -11,6 +11,7 @@ namespace VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configu
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Credential> Credentials => Set<Credential>();
+    public DbSet<User> Users { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

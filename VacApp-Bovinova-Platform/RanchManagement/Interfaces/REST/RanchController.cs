@@ -129,7 +129,7 @@ public class BovineController(IBovineCommandService commandService,
 /// <summary>
 /// API controller for managing vaccines
 /// </summary>
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("/api/v1/vaccines")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -246,7 +246,7 @@ public class VaccineController(
 /// <summary>
 /// API controller for managing stables
 /// </summary>
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("/api/v1/stables")]
 [Produces(MediaTypeNames.Application.Json)]

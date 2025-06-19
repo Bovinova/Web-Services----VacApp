@@ -1,22 +1,17 @@
-using System.Reflection.Metadata;
 using System.Text.Json;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VacApp_Bovinova_Platform.IAM.Application.OutBoundServices;
-using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
-using VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.Google.Configuration;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.Google.Services;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
-using Constant = VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Google.TokenHandler.Constant;
 
 namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST;
 
 [Route("api/v1/[controller]")]
 [ApiController]
-public class AuthorizeController(IGoogleAuthorization googleAuthorization,
-    AppDbContext context,
-    ITokenService tokenService) : ControllerBase
+public class UserGoogleController(IGoogleAuthorization googleAuthorization,
+    AppDbContext context, IConfiguration configuration) : ControllerBase
 {
     [HttpGet]
     [AllowAnonymous]
@@ -34,11 +29,12 @@ public class AuthorizeController(IGoogleAuthorization googleAuthorization,
         return Redirect($"https://localhost:7272/connect/{_credential.UserId}");
     }
 
-    [HttpGet("token/{userId}")]
+
+    [HttpGet("sign-in/{userId}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetAccessToken(string userId)
     {
-        Guid _userId = Guid.Empty;
+        Guid _userId;
         try
         {
             _userId = Guid.Parse(userId);
@@ -47,10 +43,24 @@ public class AuthorizeController(IGoogleAuthorization googleAuthorization,
         {
             return Unauthorized();
         }
-            
+
         var credential = await context.Credentials
             .FirstOrDefaultAsync(c => c.UserId == _userId);
-        return Ok(JsonSerializer.Serialize
-            (new Token(credential!.AccessToken, credential.UserId.ToString())));
+
+        if (credential == null)
+            return Unauthorized();
+
+        // Usa la misma clave secreta que en la configuración
+        var secret = configuration["TokenSettings:Secret"];
+        var jwt = JwtGenerator.GenerateJwt(credential.UserId.ToString(), secret);
+
+        var result = new
+        {
+            accessTokenForGoogleServices = credential.AccessToken,
+            userId = credential.UserId.ToString(),
+            token = jwt
+        };
+
+        return Ok(result);
     }
 }
