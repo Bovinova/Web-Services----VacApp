@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 
@@ -66,10 +67,26 @@ public class Bovine
     public string? BovineImg { get; private set; }
     private static readonly Regex ImageUrlRegex = new(@"^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$", RegexOptions.IgnoreCase);
     
+    
+    /// <summary>
+    /// User Identifier As Foreign Key
+    /// </summary>
+    public UserId? UserId { get; set; }
+    
+    
     // Default constructor for EF Core
     private Bovine() { }
     
-    public Bovine(string name, string gender, DateTime? birthDate, string? breed, string? location, string? bovineImg, int? stableId)
+    public Bovine(
+        string name, 
+        string gender, 
+        DateTime? birthDate,
+        string? breed, 
+        string? location, 
+        string? bovineImg, 
+        int? stableId,
+        UserId? userId
+        )
     {
         Name = name;
         Gender = gender;
@@ -78,6 +95,7 @@ public class Bovine
         Location = location;
         BovineImg = ValidateImageUrl(bovineImg);
         StableId = stableId;
+        UserId = userId;
     }
 
     // Constructor with parameters
@@ -93,6 +111,7 @@ public class Bovine
         Location = command.Location;
         BovineImg = ValidateImageUrl(command.BovineImg);
         StableId = command.StableId;
+        UserId = command.UserId ?? throw new ArgumentException("UserId must be set by the system");
     }
 
     //Update Bovine

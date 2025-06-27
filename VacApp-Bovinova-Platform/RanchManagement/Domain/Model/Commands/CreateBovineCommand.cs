@@ -1,3 +1,5 @@
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
+
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 
 public record CreateBovineCommand(
@@ -7,4 +9,5 @@ public record CreateBovineCommand(
     string? Breed,
     string? Location,
     string? BovineImg,
-    int? StableId);
+    int? StableId,
+    UserId? UserId);

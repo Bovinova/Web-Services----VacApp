@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Repositories;
@@ -17,6 +18,11 @@ public class BovineRepository(AppDbContext ctx)
     public async Task<IEnumerable<Bovine>> FindByStableIdAsync(int? stableId)
     {
         return await Context.Set<Bovine>().Where(f => f.StableId == stableId).ToListAsync();
+    }
+    
+    public async Task<IEnumerable<Bovine>> FindByUserIdAsync(UserId userId)
+    {
+        return await Context.Set<Bovine>().Where(f => f.UserId == userId).ToListAsync();
     }
     
     public async Task<int> CountBovinesByStableIdAsync(int stableId)

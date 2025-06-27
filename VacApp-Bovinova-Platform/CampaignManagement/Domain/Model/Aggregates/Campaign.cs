@@ -30,7 +30,6 @@ public class Campaign
         this.Goals = new List<Goal>();
         this.Channels = new List<Channel>();
         this.StableId = new StableId();
-        
         //this.Channel = new Channel();      
     }
     

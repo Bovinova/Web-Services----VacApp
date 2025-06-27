@@ -1,5 +1,6 @@
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
 
@@ -14,7 +15,7 @@ public class BovineQueryService(IBovineRepository bovineRepository) : IBovineQue
     /// <returns></returns>
     public async Task<IEnumerable<Bovine>> Handle(GetAllBovinesQuery query)
     {
-        return await bovineRepository.ListAsync();
+        return await bovineRepository.FindByUserIdAsync(new UserId(query.UserId));
     }
     
     /// <summary>
@@ -37,5 +38,9 @@ public class BovineQueryService(IBovineRepository bovineRepository) : IBovineQue
         return await bovineRepository.FindByStableIdAsync(query.StableId);
     }
     
-    
+    public async Task<int> CountBovinesByUserIdAsync(UserId userId)
+    {
+        var bovines = await bovineRepository.FindByUserIdAsync(userId);
+        return bovines.Count();
+    }
 }

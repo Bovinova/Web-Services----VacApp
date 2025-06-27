@@ -46,7 +46,16 @@ public class BovineCommandService(IBovineRepository bovineRepository,
 
         // Creates a new bovine entity
         var bovineImg = command.BovineImg ?? "https://placehold.co/600x400";
-        bovine = new Bovine(command.Name, command.Gender, command.BirthDate, command.Breed, command.Location, bovineImg, command.StableId);
+        bovine = new Bovine(
+            command.Name, 
+            command.Gender, 
+            command.BirthDate, 
+            command.Breed, 
+            command.Location, 
+            bovineImg, 
+            command.StableId,
+            command.UserId
+            );
 
         try
         {

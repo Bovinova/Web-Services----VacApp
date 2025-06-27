@@ -26,7 +26,9 @@ public class UserGoogleController(IGoogleAuthorization googleAuthorization,
         var _credential = await context.Credentials.
             FirstOrDefaultAsync(c=>c.AccessToken == userCredential.Token.AccessToken);
         //Return to the web frontend with the access token
-        return Redirect($"https://localhost:7272/connect/{_credential.UserId}");
+        return Redirect($"https://googleauthhandlerapp.azurewebsites.net/connect-google/{_credential.UserId}");
+        //return Redirect($"http://localhost:5173/connect-google/{_credential.UserId}");
+
     }
 
 

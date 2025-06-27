@@ -1,9 +1,18 @@
 using System.Net.Mime;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Queries;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.IAM.Domain.Services;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
 
 namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
 {
@@ -12,8 +21,14 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
     [Route("api/v1/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     [Tags("User")]
-    public class UserController(IUserCommandService commandService,
-        IUserQueryService queryService) : ControllerBase
+    public class UserController(
+        IUserCommandService commandService,
+        IUserQueryService queryService,
+        IBovineQueryService bovineQueryService,
+        IStableQueryService stableQueryService,
+        ICampaignQueryService campaignQueryService,
+        IVaccineQueryService vaccineQueryService
+        ) : ControllerBase
     {
         
         [HttpPost("sign-up")]
@@ -55,6 +70,30 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result, userName, email);
 
             return Ok(userResource);
+        }
+        
+        [HttpGet("get-info")]
+        [SwaggerResponse(StatusCodes.Status200OK, "User info", typeof(UserInfoResource))]
+        public async Task<ActionResult> GetInfo()
+        {
+            // Get user ID from JWT claims
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+
+            // Use the query handler to get the user by ID
+            var user = await queryService.Handle(new GetUserByIdQuery(userId));
+            if (user is null)
+                return NotFound("User not found");
+
+            // Get bovine count
+            var totalBovines = await bovineQueryService.CountBovinesByUserIdAsync(new UserId(userId));
+
+            // Build and return the response
+            var resource = new UserInfoResource(user.Username, totalBovines);
+            return Ok(resource);
         }
     }
 }

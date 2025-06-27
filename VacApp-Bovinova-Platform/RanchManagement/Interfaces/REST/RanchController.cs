@@ -1,7 +1,9 @@
 using System.Net.Mime;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
@@ -31,18 +33,23 @@ public class BovineController(IBovineCommandService commandService,
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateBovines([FromForm] CreateBovineResource resource)
     {
-        var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource);
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+
+        // Usa el ID extraído para crear el comando
+        var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
         var result = await commandService.Handle(command);
+
         if (result is null) return BadRequest();
 
         return CreatedAtAction(nameof(GetBovineById), new { id = result.Id },
             BovineResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
 
-    /// <summary>
-    /// Gets all bovines in the system.
-    /// </summary>
-    /// <returns></returns>
+
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all bovines",
@@ -51,10 +58,18 @@ public class BovineController(IBovineCommandService commandService,
     [SwaggerResponse(StatusCodes.Status200OK, "The list of bovines were found", typeof(IEnumerable<BovineResource>))]
     public async Task<IActionResult> GetAllBovine()
     {
-        var bovines = await queryService.Handle(new GetAllBovinesQuery());
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+
+        // Usar userId para consultar
+        var bovines = await queryService.Handle(new GetAllBovinesQuery(userId));
         var bovineResources = bovines.Select(BovineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(bovineResources);
     }
+
 
     /// <summary>
     /// Gets a bovine by its ID.

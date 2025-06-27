@@ -5,6 +5,7 @@ using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configurati
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 
 namespace VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 
@@ -12,6 +13,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Credential> Credentials => Set<Credential>();
     public DbSet<User> Users { get; set; }
+    public DbSet<MicrosoftCredential> MicrosoftCredentials { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -31,6 +33,10 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<User>().Property(f => f.Password).IsRequired();
         builder.Entity<User>().Property(f => f.Email).IsRequired();
         builder.Entity<User>().Property(f => f.EmailConfirmed).IsRequired();
+        //MicrosoftCredential
+        builder.Entity<MicrosoftCredential>().HasKey(f => f.UserId);
+        builder.Entity<MicrosoftCredential>().Property(f => f.UserId).IsRequired();
+        builder.Entity<MicrosoftCredential>().Property(f => f.Email).IsRequired();
         
         
         /* Ranch Management BC -------------------------------------------------------------------------------------- */
@@ -45,6 +51,15 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Bovine>().Property(f => f.Location).IsRequired();
         builder.Entity<Bovine>().Property(f => f.BovineImg).IsRequired();
         builder.Entity<Bovine>().Property(f => f.StableId).IsRequired();
+        builder.Entity<Bovine>()
+            .Property(f => f.UserId)
+            .HasConversion(
+                v => v.UserIdentifier,     // al guardar: UserId → int
+                v => new UserId(v))        // al leer: int → UserId
+            .HasColumnName("user_id")
+            .IsRequired();
+
+        
 
         //Vaccine
 
@@ -60,6 +75,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Stable>().HasKey(f => f.Id);
         builder.Entity<Stable>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Stable>().Property(f => f.Limit).IsRequired();
+        
 
         /* ---------------------------------------------------------------------------------------------------------- */
         /* Staff Administration BC -------------------------------------------------------------------------------------- */

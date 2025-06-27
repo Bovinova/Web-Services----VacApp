@@ -40,6 +40,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Google.Services;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Google.TokenHandler;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Outlook.Services;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.Google.Services;
 
 DotEnv.Load();
@@ -138,6 +139,8 @@ builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IGoogleAuthHelper, GoogleAuthHelperService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<IMicrosoftAuthorization, MicrosoftAuthorizationService>();
+
 
 // Configuración correcta de autenticación
 builder.Services.AddAuthentication(options =>
