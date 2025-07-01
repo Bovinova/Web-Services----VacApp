@@ -15,7 +15,7 @@ public class BovineQueryService(IBovineRepository bovineRepository) : IBovineQue
     /// <returns></returns>
     public async Task<IEnumerable<Bovine>> Handle(GetAllBovinesQuery query)
     {
-        return await bovineRepository.FindByUserIdAsync(new UserId(query.UserId));
+        return await bovineRepository.FindByUserIdAsync(new RanchUserId(query.UserId));
     }
     
     /// <summary>
@@ -38,7 +38,7 @@ public class BovineQueryService(IBovineRepository bovineRepository) : IBovineQue
         return await bovineRepository.FindByStableIdAsync(query.StableId);
     }
     
-    public async Task<int> CountBovinesByUserIdAsync(UserId userId)
+    public async Task<int> CountBovinesByUserIdAsync(RanchUserId userId)
     {
         var bovines = await bovineRepository.FindByUserIdAsync(userId);
         return bovines.Count();

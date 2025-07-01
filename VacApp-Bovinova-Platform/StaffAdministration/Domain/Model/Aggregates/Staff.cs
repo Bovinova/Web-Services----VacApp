@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.ValueObjects;
 
@@ -13,22 +15,31 @@ public class Staff
     [StringLength(100)]
     public string Name { get; private set; }
     
+    [Required]
     public EmployeeStatus EmployeeStatus { get; private set; }
     
-    public CampaignId CampaignId { get; private set; }
+    public int? CampaignId { get; private set; }
+    [ForeignKey(nameof(CampaignId))]
+    public Campaign? Campaign { get; private set; }
+    
+    
+    /// <summary>
+    /// User Identifier As Foreign Key
+    /// </summary>
+    public StaffUserId? StaffUserId { get; set; }
 
     public Staff()
     {
         Name = "";
         EmployeeStatus = new EmployeeStatus();
-        CampaignId = new CampaignId();
     }
     
-    public Staff(string name, int employeeStatus, int campaignId)
+    public Staff(string name, int employeeStatus, int? campaignId, StaffUserId? staffUserId)
     {
         Name = name;
         EmployeeStatus = new EmployeeStatus(employeeStatus);
-        CampaignId = new CampaignId(campaignId);
+        CampaignId = campaignId;
+        StaffUserId = staffUserId;
     }
 
     // Constructor for creating a new Staff
@@ -36,7 +47,9 @@ public class Staff
     {
         Name = command.Name;
         EmployeeStatus = new EmployeeStatus(command.EmployeeStatus);
-        CampaignId = new CampaignId(command.CampaignId);
+        CampaignId = command.CampaignId ?? throw new ArgumentException("CampaignId is required");
+        StaffUserId = command.StaffUserId ?? throw new ArgumentException("StaffUserId must be set by the system");
+
     }
 
     // Update method for modifying an existing Staff
@@ -44,6 +57,6 @@ public class Staff
     {
         Name = command.Name;
         EmployeeStatus = new EmployeeStatus(command.EmployeeStatus);
-        CampaignId = new CampaignId(command.CampaignId);
+        CampaignId = command.CampaignId;
     }
 }

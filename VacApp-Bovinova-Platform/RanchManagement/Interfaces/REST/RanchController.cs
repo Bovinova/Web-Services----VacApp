@@ -162,7 +162,13 @@ public class VaccineController(
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateVaccines([FromForm] CreateVaccineResource resource)
     {
-        var command = CreateVaccineCommandFromResourceAssembler.ToCommandFromResource(resource);
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var command = CreateVaccineCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
 
@@ -182,7 +188,13 @@ public class VaccineController(
     [SwaggerResponse(StatusCodes.Status200OK, "The list of vaccines were found", typeof(IEnumerable<VaccineResource>))]
     public async Task<IActionResult> GetAllVaccine()
     {
-        var vaccines = await queryService.Handle(new GetAllVaccinesQuery());
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var vaccines = await queryService.Handle(new GetAllVaccinesQuery(userId));
         var vaccineResources = vaccines.Select(VaccineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(vaccineResources);
     }
@@ -273,7 +285,13 @@ public class StableController(
     [HttpPost]
     public async Task<IActionResult> CreateStables([FromBody] CreateStableResource resource)
     {
-        var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource);
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
 
@@ -289,7 +307,13 @@ public class StableController(
     [SwaggerResponse(StatusCodes.Status200OK, "The list of stables were found", typeof(IEnumerable<StableResource>))]
     public async Task<IActionResult> GetAllStable()
     {
-        var stables = await queryService.Handle(new GetAllStablesQuery());
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var stables = await queryService.Handle(new GetAllStablesQuery(userId));
         var stableResources = stables.Select(StableResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(stableResources);
     }

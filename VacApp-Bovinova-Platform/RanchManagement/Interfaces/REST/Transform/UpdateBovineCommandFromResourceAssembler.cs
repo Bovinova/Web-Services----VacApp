@@ -3,7 +3,7 @@ using VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Resources;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Transform;
 
-public class UpdateBovineCommandFromResourceAssembler
+public static class UpdateBovineCommandFromResourceAssembler
 {
     public static UpdateBovineCommand ToCommandFromResource(int id, UpdateBovineResource resource)
     {

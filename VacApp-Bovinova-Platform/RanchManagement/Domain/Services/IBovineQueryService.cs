@@ -11,5 +11,5 @@ public interface IBovineQueryService
     Task<Bovine> Handle(GetBovinesByIdQuery query);
     
     Task<IEnumerable<Bovine>> Handle(GetBovinesByStableIdQuery query);
-    Task<int> CountBovinesByUserIdAsync(UserId userId);
+    Task<int> CountBovinesByUserIdAsync(RanchUserId userId);
 }

@@ -4,7 +4,7 @@ using VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Resources;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST.Transform;
 
-public class CreateBovineCommandFromResourceAssembler
+public static class CreateBovineCommandFromResourceAssembler
 {
     public static CreateBovineCommand ToCommandFromResource(CreateBovineResource resource, int userId)
     {
@@ -16,7 +16,7 @@ public class CreateBovineCommandFromResourceAssembler
             resource.Location,
             resource.BovineImg,
             resource.StableId,
-            new UserId(userId)
+            new RanchUserId(userId)
         );
     }
 }

@@ -25,9 +25,9 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         IUserCommandService commandService,
         IUserQueryService queryService,
         IBovineQueryService bovineQueryService,
-        IStableQueryService stableQueryService,
         ICampaignQueryService campaignQueryService,
-        IVaccineQueryService vaccineQueryService
+        IVaccineQueryService vaccineQueryService,
+        IStableQueryService stableQueryService
         ) : ControllerBase
     {
         
@@ -89,10 +89,20 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
                 return NotFound("User not found");
 
             // Get bovine count
-            var totalBovines = await bovineQueryService.CountBovinesByUserIdAsync(new UserId(userId));
+            var totalBovines = await bovineQueryService.CountBovinesByUserIdAsync(new RanchUserId(userId));
+            
+            // Get campaign count
+            //var totalCampaigns = await campaignQueryService.CountCampaignsByUserIdAsync(new CampaignUserId(userId));
+            
+            // Get vaccine count
+            var totalVaccinations = await vaccineQueryService.CountVaccinesByUserIdAsync(new RanchUserId(userId));
+            
+            // Get vaccine count
+            var totalStables = await stableQueryService.CountStablesByUserIdAsync(new RanchUserId(userId));
+
 
             // Build and return the response
-            var resource = new UserInfoResource(user.Username, totalBovines);
+            var resource = new UserInfoResource(user.Username, totalBovines, totalVaccinations, totalStables);
             return Ok(resource);
         }
     }

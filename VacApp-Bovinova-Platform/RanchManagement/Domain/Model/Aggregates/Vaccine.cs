@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 
@@ -52,10 +53,18 @@ public class Vaccine
     /// </summary>
     [ForeignKey(nameof(BovineId))]
     public Bovine? Bovine { get; private set; }
+    
+    /// <summary>
+    /// User Identifier As Foreign Key
+    /// </summary>
+    public RanchUserId? RanchUserId { get; set; }
 
     // Default constructor for EF Core
-    private Vaccine() { }
-    public Vaccine(int id, string name, string? vaccineType, DateTime? vaccineDate, string? vaccineImg, int bovineId, Bovine? bovine)
+    private Vaccine()
+    {
+        Name = "";
+    }
+    public Vaccine(int id, string name, string? vaccineType, DateTime? vaccineDate, string? vaccineImg, int bovineId, Bovine? bovine, RanchUserId? ranchUserId)
     {
         Id = id;
         Name = name;
@@ -64,6 +73,7 @@ public class Vaccine
         VaccineImg = ValidateImageUrl(vaccineImg);
         BovineId = bovineId;
         Bovine = bovine;
+        RanchUserId = ranchUserId;
     }
 
     // Constructor with parameters
@@ -74,6 +84,7 @@ public class Vaccine
         VaccineDate = command.VaccineDate;
         VaccineImg = ValidateImageUrl(command.VaccineImg);
         BovineId = command.BovineId;
+        RanchUserId = command.RanchUserId ?? throw new ArgumentException("RanchUserId must be set by the system");
     }
 
     //Update

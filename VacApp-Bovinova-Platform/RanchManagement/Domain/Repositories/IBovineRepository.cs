@@ -9,6 +9,6 @@ public interface IBovineRepository : IBaseRepository<Bovine>
 {
     Task<Bovine?> FindByNameAsync(string name);
     Task<IEnumerable<Bovine>> FindByStableIdAsync(int? stableId);
-    Task<IEnumerable<Bovine>> FindByUserIdAsync(UserId userId);
+    Task<IEnumerable<Bovine>> FindByUserIdAsync(RanchUserId userId);
     Task<int> CountBovinesByStableIdAsync(int stableId);
 }

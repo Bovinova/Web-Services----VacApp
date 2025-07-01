@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 
@@ -15,6 +16,7 @@ public class Stable
     /// Name of the Stable
     /// </summary>
     [Required]
+    [StringLength(50)]
     public string Name { get; private set; }
     
     /// <summary>
@@ -23,8 +25,16 @@ public class Stable
     [Required]
     public int Limit { get; private set; }
     
+    /// <summary>
+    /// User Identifier As Foreign Key
+    /// </summary>
+    public RanchUserId? RanchUserId { get; set; }
+    
     // Default constructor for EF Core
-    private Stable() { }
+    private Stable()
+    {
+        Name = "Stable A";
+    }
     
     // Constructor with parameters
     public Stable(CreateStableCommand command)
@@ -36,6 +46,7 @@ public class Stable
         
         Limit = command.Limit;
         Name = command.Name;
+        RanchUserId = command.RanchUserId ?? throw new ArgumentException("RanchUserId must be set by the system");
     }
     
     //Update

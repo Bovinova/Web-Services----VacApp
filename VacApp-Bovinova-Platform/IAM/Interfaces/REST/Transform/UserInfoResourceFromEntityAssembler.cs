@@ -5,15 +5,19 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
 
 public class UserInfoResourceFromEntityAssembler
 {
-    public static UserInfoResource ToResourceFromEntity(User user, int totalBovines/*, int totalCampaigns, int totalVaccinations,
-        int totalStables*/)
+    public static UserInfoResource ToResourceFromEntity(
+        User user, 
+        int totalBovines, 
+        //int totalCampaigns, 
+        int totalVaccinations,
+        int totalStables)
     {
         return new UserInfoResource(
             user.Username,
-            totalBovines/*,
-            totalCampaigns,
+            totalBovines,
+            //totalCampaigns,
             totalVaccinations,
-            totalStables*/
+            totalStables
         );
     }
 }

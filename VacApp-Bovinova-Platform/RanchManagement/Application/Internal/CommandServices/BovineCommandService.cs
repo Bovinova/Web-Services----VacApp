@@ -54,7 +54,7 @@ public class BovineCommandService(IBovineRepository bovineRepository,
             command.Location, 
             bovineImg, 
             command.StableId,
-            command.UserId
+            command.RanchUserId
             );
 
         try

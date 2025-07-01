@@ -53,9 +53,6 @@ public class Bovine
     /// </summary>
     [Required]
     public int? StableId { get; private set; }
-    /// <summary>
-    /// Instancing the Stable Entity for the Foreign Key
-    /// </summary>
     [ForeignKey(nameof(StableId))]
     public Stable? Stable { get; private set; }
 
@@ -71,11 +68,15 @@ public class Bovine
     /// <summary>
     /// User Identifier As Foreign Key
     /// </summary>
-    public UserId? UserId { get; set; }
+    public RanchUserId? RanchUserId { get; set; }
     
     
     // Default constructor for EF Core
-    private Bovine() { }
+    private Bovine()
+    {
+        Name = "";
+        Gender = "Male";
+    }
     
     public Bovine(
         string name, 
@@ -85,7 +86,7 @@ public class Bovine
         string? location, 
         string? bovineImg, 
         int? stableId,
-        UserId? userId
+        RanchUserId? ranchUserId
         )
     {
         Name = name;
@@ -95,7 +96,7 @@ public class Bovine
         Location = location;
         BovineImg = ValidateImageUrl(bovineImg);
         StableId = stableId;
-        UserId = userId;
+        RanchUserId = ranchUserId;
     }
 
     // Constructor with parameters
@@ -111,7 +112,7 @@ public class Bovine
         Location = command.Location;
         BovineImg = ValidateImageUrl(command.BovineImg);
         StableId = command.StableId;
-        UserId = command.UserId ?? throw new ArgumentException("UserId must be set by the system");
+        RanchUserId = command.RanchUserId ?? throw new ArgumentException("UserId must be set by the system");
     }
 
     //Update Bovine

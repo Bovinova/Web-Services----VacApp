@@ -1,5 +1,6 @@
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Queries;
+using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.ValueObjects;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Repositories;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Services;
 
@@ -14,7 +15,7 @@ public class StaffQueryService(IStaffRepository staffRepository) : IStaffQuerySe
     /// <returns></returns>
     public async Task<IEnumerable<Staff>> Handle(GetAllStaffQuery query)
     {
-        return await staffRepository.ListAsync();
+        return await staffRepository.FindByUserIdAsync(new StaffUserId(query.UserId));
     }
     
     /// <summary>
@@ -55,5 +56,11 @@ public class StaffQueryService(IStaffRepository staffRepository) : IStaffQuerySe
     public async Task<Staff> Handle(GetStaffByNameQuery query)
     {
         return await staffRepository.FindByNameAsync(query.Name);
+    }
+    
+    public async Task<int> CountStaffsByUserIdAsync(StaffUserId userId)
+    {
+        var staffs = await staffRepository.FindByUserIdAsync(userId);
+        return staffs.Count();
     }
 }

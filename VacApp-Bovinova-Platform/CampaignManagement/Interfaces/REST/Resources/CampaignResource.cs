@@ -11,4 +11,4 @@ public record CampaignResource(
     string Status,
     ICollection<Goal> Goals,
     ICollection<Channel> Channel,
-    int StableId);
+    int? StableId);

@@ -20,9 +20,9 @@ public class BovineRepository(AppDbContext ctx)
         return await Context.Set<Bovine>().Where(f => f.StableId == stableId).ToListAsync();
     }
     
-    public async Task<IEnumerable<Bovine>> FindByUserIdAsync(UserId userId)
+    public async Task<IEnumerable<Bovine>> FindByUserIdAsync(RanchUserId userId)
     {
-        return await Context.Set<Bovine>().Where(f => f.UserId == userId).ToListAsync();
+        return await Context.Set<Bovine>().Where(f => f.RanchUserId == userId).ToListAsync();
     }
     
     public async Task<int> CountBovinesByStableIdAsync(int stableId)

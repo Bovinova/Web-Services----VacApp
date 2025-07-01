@@ -3,7 +3,7 @@ using VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Resources;
 
 namespace VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Transform;
 
-public class CampaignResourceFromEntityAssembler
+public static class CampaignResourceFromEntityAssembler
 {
     public static CampaignResource ToResourceFromEntity(Campaign campaign) =>
     new CampaignResource(
@@ -15,5 +15,5 @@ public class CampaignResourceFromEntityAssembler
         campaign.Status, 
         campaign.Goals, 
         campaign.Channels,
-        campaign.StableId.StableIdentifier);
+        campaign.StableId);
 }

@@ -10,4 +10,4 @@ public record CreateBovineCommand(
     string? Location,
     string? BovineImg,
     int? StableId,
-    UserId? UserId);
+    RanchUserId? RanchUserId);
