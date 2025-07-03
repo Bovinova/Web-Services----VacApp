@@ -6,21 +6,21 @@ using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServices;
 
-public class StableCommandService(IStableRepository stableRepository, 
+public class StableCommandService(IStableRepository stableRepository,
     IUnitOfWork unitOfWork) : IStableCommandService
 {
     public async Task<Stable?> Handle(CreateStableCommand command)
     {
         // Check if a Stable entity with the given Name already exists
-        var stable = 
+        var stable =
             await stableRepository.FindByNameAsync(command.Name);
-        if (stable != null) 
+        if (stable != null)
             throw new Exception($"Stable entity with name '{command.Name}' already exists.");
         // Create a new Stable entity from the command data
-        stable = new Stable(command);
 
         try
         {
+            stable = new Stable(command);
             // Add the new Stable entity to the repository and complete the transaction
             await stableRepository.AddAsync(stable);
             await unitOfWork.CompleteAsync();
@@ -33,8 +33,8 @@ public class StableCommandService(IStableRepository stableRepository,
 
         return stable;
     }
-    
-    
+
+
     /// <summary>
     /// Handles the update of an existing stable entity.
     /// </summary>
@@ -67,8 +67,8 @@ public class StableCommandService(IStableRepository stableRepository,
 
         return stable;
     }
-    
-    
+
+
     /// <summary>
     /// Handles the deletion of an existing stable entity.
     /// </summary>

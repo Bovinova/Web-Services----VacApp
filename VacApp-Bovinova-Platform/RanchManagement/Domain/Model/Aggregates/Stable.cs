@@ -36,6 +36,9 @@ public class Stable
             throw new ArgumentException("Limit must be greater than 0");
         }
 
+        if (string.IsNullOrWhiteSpace(command.Name))
+            throw new ArgumentException("Name cannot be empty or whitespace");
+
         Limit = command.Limit;
         Name = command.Name;
         UserId = command.UserId;

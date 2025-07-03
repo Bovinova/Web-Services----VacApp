@@ -258,17 +258,38 @@ public class StableController(
    IStableQueryService queryService) : ControllerBase
 {
     [HttpPost]
+    [SwaggerOperation(
+    Summary = "Create a new stable",
+    Description = "Creates a new stable associated with the authenticated user.",
+    OperationId = "CreateStable"
+    )]
+    [SwaggerResponse(StatusCodes.Status201Created, "Stable successfully created", typeof(StableResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error")]
     public async Task<IActionResult> CreateStables([FromBody] CreateStableResource resource)
 
     {
         var user = (User?)HttpContext.Items["User"];
         if (user is null) return Unauthorized("User not found.");
         var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource, user.Id);
-        var result = await commandService.Handle(command);
-        if (result is null) return BadRequest();
-
-        return CreatedAtAction(nameof(GetStableById), new { id = result.Id },
-            StableResourceFromEntityAssembler.ToResourceFromEntity(result));
+        try
+        {
+            var result = await commandService.Handle(command);
+            if (result is null) return BadRequest();
+            return CreatedAtAction(nameof(GetStableById), new { id = result.Id },
+           StableResourceFromEntityAssembler.ToResourceFromEntity(result));
+        }
+        catch (Exception e)
+        {
+            if (e is ArgumentException)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An error occurred while creating the stable.", details = e.Message });
+            }
+        }
     }
 
     [HttpGet]
