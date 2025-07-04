@@ -139,6 +139,8 @@ public class BovineController(IBovineCommandService commandService,
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBovine(int id)
     {
         var command = new DeleteBovineCommand(id);
@@ -167,6 +169,14 @@ public class VaccineController(
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Create a new vaccine",
+        Description = "Creates a new vaccine associated with the authenticated user.",
+        OperationId = "CreateVaccines"
+    )]
+    [SwaggerResponse(StatusCodes.Status201Created, "Vaccine successfully created", typeof(VaccineResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateVaccines([FromForm] CreateVaccineResource resource)
     {
@@ -267,6 +277,8 @@ public class VaccineController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteVaccine(int id)
     {
         var command = new DeleteVaccineCommand(id);
@@ -294,7 +306,7 @@ public class StableController(
     [SwaggerOperation(
         Summary = "Create a new stable",
         Description = "Creates a new stable associated with the authenticated user.",
-        OperationId = "CreateStable"
+        OperationId = "CreateStables"
     )]
     [SwaggerResponse(StatusCodes.Status201Created, "Stable successfully created", typeof(StableResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
@@ -363,15 +375,19 @@ public class StableController(
     /// <summary>
     /// Deletes a stable by its ID.
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">Stable ID</param>
+    /// <returns>Success message or NotFound</returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteStable(int id)
     {
         var command = new DeleteStableCommand(id);
         var result = await commandService.Handle(command);
-        if (result is null) return NotFound();
 
-        return NoContent();
+        if (result is null)
+            return NotFound(new { message = "Stable not found" });
+
+        return Ok(new { message = "Deleted successfully" });
     }
 }
