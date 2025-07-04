@@ -21,6 +21,9 @@ namespace VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates
         [Required]
         [EmailAddress]
         public string Email { get; private set; }
+        
+        [Required]
+        public bool EmailConfirmed { get; set; } = false;
 
         private User() { }
 

@@ -10,5 +10,5 @@ public record CreateCampaignResource(
     string Status,
     List<Goal> Goals,
     List<Channel> Channels,
-    int StableId
+    int? StableId
     );

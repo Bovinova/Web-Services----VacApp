@@ -17,8 +17,21 @@ public class Campaign
     public ICollection<Goal> Goals { get; private set; }
     public int GoalId { get; private set; }
     public ICollection<Channel> Channels { get; private set; }
-    public StableId StableId { get; private set; }
-    public int UserId { get; private set; }
+
+    /// <summary>
+    /// Stable FK
+    /// </summary>
+    public int? StableId { get; private set; }
+    [ForeignKey(nameof(StableId))]
+    public Stable? Stable { get; private set; }
+    
+    /// <summary>
+    /// User Identifier As Foreign Key
+    /// </summary>
+    public CampaignUserId? CampaignUserId { get; set; }
+    
+    
+    
 
     protected Campaign()
     {
@@ -29,21 +42,19 @@ public class Campaign
         this.Status = string.Empty;
         this.Goals = new List<Goal>();
         this.Channels = new List<Channel>();
-        this.StableId = new StableId();
-        this.UserId = 0;
-        //this.Channel = new Channel();      
+        
     }
-
+    
     public Campaign(
-        string name,
-        string description,
-        DateTime startDate,
-        DateTime endDate,
-        string status,
-        ICollection<Goal> goals,
-        ICollection<Channel> channels,
-        int stableId,
-        int userId)
+        string name, 
+        string description, 
+        DateTime startDate, 
+        DateTime endDate, 
+        string status, 
+        ICollection<Goal> goals, 
+        ICollection<Channel> channels, 
+        int? stableId,
+        CampaignUserId? campaignUserId)
     {
         this.Name = name;
         this.Description = description;
@@ -52,8 +63,8 @@ public class Campaign
         this.Status = status;
         this.Goals = goals;
         this.Channels = channels;
-        this.StableId = new StableId(stableId);
-        this.UserId = userId;
+        this.StableId = stableId;
+        CampaignUserId = campaignUserId;
     }
 
     public Campaign(CreateCampaignCommand command)
@@ -65,10 +76,10 @@ public class Campaign
         this.Status = command.Status;
         this.Goals = command.Goals;
         this.Channels = command.Channel;
-        this.StableId = new StableId(command.StableId);
-        this.UserId = command.UserId;
+        this.StableId = command.StableId;
+        CampaignUserId = command.CampaignUserId ?? throw new ArgumentException("UserId must be set by the system");
     }
-
+    
     public void UpdateStatus(string status)
     {
         this.Status = status;
@@ -81,10 +92,10 @@ public class Campaign
         //this.Goal.UpdateValues(description, metric, targetValue, currentValue);
         this.Goals.Add(goal);
     }
-
+    
     public void AddChannel(Channel channel)
     {
         this.Channels.Add(channel);
     }
-
+    
 }

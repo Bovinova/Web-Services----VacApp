@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 
@@ -51,9 +53,6 @@ public class Bovine
     /// </summary>
     [Required]
     public int? StableId { get; private set; }
-    /// <summary>
-    /// Instancing the Stable Entity for the Foreign Key
-    /// </summary>
     [ForeignKey(nameof(StableId))]
     public Stable? Stable { get; private set; }
 
@@ -63,21 +62,41 @@ public class Bovine
     [Required]
     [StringLength(300)]
     public string? BovineImg { get; private set; }
-
-    public int UserId { get; private set; }
-
+    private static readonly Regex ImageUrlRegex = new(@"^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$", RegexOptions.IgnoreCase);
+    
+    
+    /// <summary>
+    /// User Identifier As Foreign Key
+    /// </summary>
+    public RanchUserId? RanchUserId { get; set; }
+    
+    
     // Default constructor for EF Core
-    public Bovine(string name, string gender, DateTime? birthDate, string? breed, string? location, string? bovineImg,
-        int? stableId, int userId)
+    private Bovine()
+    {
+        Name = "";
+        Gender = "Male";
+    }
+    
+    public Bovine(
+        string name, 
+        string gender, 
+        DateTime? birthDate,
+        string? breed, 
+        string? location, 
+        string? bovineImg, 
+        int? stableId,
+        RanchUserId? ranchUserId
+        )
     {
         Name = name;
         Gender = gender;
         BirthDate = birthDate;
         Breed = breed;
         Location = location;
-        BovineImg = bovineImg;
+        BovineImg = ValidateImageUrl(bovineImg);
         StableId = stableId;
-        UserId = userId;
+        RanchUserId = ranchUserId;
     }
 
     // Constructor with parameters
@@ -85,15 +104,15 @@ public class Bovine
     {
         if (!command.Gender.ToLower().Equals("male") && !command.Gender.ToLower().Equals("female"))
             throw new ArgumentException("Gender must be either 'male' or 'female'");
-
+        
         Name = command.Name;
         Gender = command.Gender;
         BirthDate = command.BirthDate;
         Breed = command.Breed;
         Location = command.Location;
-        BovineImg = command.BovineImg;
+        BovineImg = ValidateImageUrl(command.BovineImg);
         StableId = command.StableId;
-        UserId = command.UserId;
+        RanchUserId = command.RanchUserId ?? throw new ArgumentException("UserId must be set by the system");
     }
 
     //Update Bovine
@@ -108,5 +127,14 @@ public class Bovine
         Breed = command.Breed;
         Location = command.Location;
         StableId = command.StableId;
+    }
+    
+    private static string ValidateImageUrl(string? imageUrl)
+    {
+        if (string.IsNullOrWhiteSpace(imageUrl) || !ImageUrlRegex.IsMatch(imageUrl))
+        {
+            throw new ArgumentException("The image URL must be a valid link to an image file.");
+        }
+        return imageUrl;
     }
 }

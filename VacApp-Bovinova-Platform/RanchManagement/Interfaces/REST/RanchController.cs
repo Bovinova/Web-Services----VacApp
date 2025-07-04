@@ -1,4 +1,6 @@
 using System.Net.Mime;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
@@ -14,7 +16,7 @@ namespace VacApp_Bovinova_Platform.RanchManagement.Interfaces.REST;
 /// <summary>
 /// API controller for managing bovines
 /// </summary>
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("/api/v1/bovines")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -28,22 +30,34 @@ public class BovineController(IBovineCommandService commandService,
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Create a new bovine",
+        Description = "Creates a new bovine associated with the authenticated user.",
+        OperationId = "CreateBovines"
+    )]
+    [SwaggerResponse(StatusCodes.Status201Created, "Bovine successfully created", typeof(BovineResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateBovines([FromForm] CreateBovineResource resource)
     {
-        var user = (User?)HttpContext.Items["User"];
-        var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource, user.Id);
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+
+        // Usa el ID extraído para crear el comando
+        var command = CreateBovineCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
         var result = await commandService.Handle(command);
+
         if (result is null) return BadRequest();
 
         return CreatedAtAction(nameof(GetBovineById), new { id = result.Id },
             BovineResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
 
-    /// <summary>
-    /// Gets all bovines in the system.
-    /// </summary>
-    /// <returns></returns>
+
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all bovines",
@@ -52,11 +66,18 @@ public class BovineController(IBovineCommandService commandService,
     [SwaggerResponse(StatusCodes.Status200OK, "The list of bovines were found", typeof(IEnumerable<BovineResource>))]
     public async Task<IActionResult> GetAllBovine()
     {
-        var user = (User?)HttpContext.Items["User"];
-        var bovines = await queryService.Handle(new GetAllBovinesQuery(user.Id));
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+
+        // Usar userId para consultar
+        var bovines = await queryService.Handle(new GetAllBovinesQuery(userId));
         var bovineResources = bovines.Select(BovineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(bovineResources);
     }
+
 
     /// <summary>
     /// Gets a bovine by its ID.
@@ -118,6 +139,8 @@ public class BovineController(IBovineCommandService commandService,
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBovine(int id)
     {
         var command = new DeleteBovineCommand(id);
@@ -131,7 +154,7 @@ public class BovineController(IBovineCommandService commandService,
 /// <summary>
 /// API controller for managing vaccines
 /// </summary>
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("/api/v1/vaccines")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -146,10 +169,24 @@ public class VaccineController(
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Create a new vaccine",
+        Description = "Creates a new vaccine associated with the authenticated user.",
+        OperationId = "CreateVaccines"
+    )]
+    [SwaggerResponse(StatusCodes.Status201Created, "Vaccine successfully created", typeof(VaccineResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateVaccines([FromForm] CreateVaccineResource resource)
     {
-        var command = CreateVaccineCommandFromResourceAssembler.ToCommandFromResource(resource);
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var command = CreateVaccineCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
 
@@ -169,7 +206,13 @@ public class VaccineController(
     [SwaggerResponse(StatusCodes.Status200OK, "The list of vaccines were found", typeof(IEnumerable<VaccineResource>))]
     public async Task<IActionResult> GetAllVaccine()
     {
-        var vaccines = await queryService.Handle(new GetAllVaccinesQuery());
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var vaccines = await queryService.Handle(new GetAllVaccinesQuery(userId));
         var vaccineResources = vaccines.Select(VaccineResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(vaccineResources);
     }
@@ -234,6 +277,8 @@ public class VaccineController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteVaccine(int id)
     {
         var command = new DeleteVaccineCommand(id);
@@ -248,7 +293,7 @@ public class VaccineController(
 /// <summary>
 /// API controller for managing stables
 /// </summary>
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("/api/v1/stables")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -259,37 +304,27 @@ public class StableController(
 {
     [HttpPost]
     [SwaggerOperation(
-    Summary = "Create a new stable",
-    Description = "Creates a new stable associated with the authenticated user.",
-    OperationId = "CreateStable"
+        Summary = "Create a new stable",
+        Description = "Creates a new stable associated with the authenticated user.",
+        OperationId = "CreateStables"
     )]
     [SwaggerResponse(StatusCodes.Status201Created, "Stable successfully created", typeof(StableResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error")]
     public async Task<IActionResult> CreateStables([FromBody] CreateStableResource resource)
-
     {
-        var user = (User?)HttpContext.Items["User"];
-        if (user is null) return Unauthorized("User not found.");
-        var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource, user.Id);
-        try
-        {
-            var result = await commandService.Handle(command);
-            if (result is null) return BadRequest();
-            return CreatedAtAction(nameof(GetStableById), new { id = result.Id },
-           StableResourceFromEntityAssembler.ToResourceFromEntity(result));
-        }
-        catch (Exception e)
-        {
-            if (e is ArgumentException)
-            {
-                return BadRequest(new { error = e.Message });
-            }
-            else
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An error occurred while creating the stable.", details = e.Message });
-            }
-        }
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var command = CreateStableCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
+        var result = await commandService.Handle(command);
+        if (result is null) return BadRequest();
+
+        return CreatedAtAction(nameof(GetStableById), new { id = result.Id },
+            StableResourceFromEntityAssembler.ToResourceFromEntity(result));
     }
 
     [HttpGet]
@@ -300,9 +335,13 @@ public class StableController(
     [SwaggerResponse(StatusCodes.Status200OK, "The list of stables were found", typeof(IEnumerable<StableResource>))]
     public async Task<IActionResult> GetAllStable()
     {
-        var user = (User?)HttpContext.Items["User"];
-        if (user is null) return Unauthorized("User not found.");
-        var stables = await queryService.Handle(new GetAllStablesQuery(user.Id));
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var stables = await queryService.Handle(new GetAllStablesQuery(userId));
         var stableResources = stables.Select(StableResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(stableResources);
     }
@@ -336,15 +375,19 @@ public class StableController(
     /// <summary>
     /// Deletes a stable by its ID.
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">Stable ID</param>
+    /// <returns>Success message or NotFound</returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteStable(int id)
     {
         var command = new DeleteStableCommand(id);
         var result = await commandService.Handle(command);
-        if (result is null) return NotFound();
 
-        return NoContent();
+        if (result is null)
+            return NotFound(new { message = "Stable not found" });
+
+        return Ok(new { message = "Deleted successfully" });
     }
 }

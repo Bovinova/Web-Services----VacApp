@@ -1,4 +1,6 @@
 using System.Net.Mime;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VacApp_Bovinova_Platform.StaffAdministration.Domain.Model.Commands;
@@ -13,7 +15,7 @@ namespace VacApp_Bovinova_Platform.StaffAdministration.Interfaces.REST;
 /// <summary>
 /// API controller for managing staffs
 /// </summary>
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("/api/v1/staff")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -29,7 +31,13 @@ public class StaffController(IStaffCommandService commandService,
     [HttpPost]
     public async Task<IActionResult> CreateStaffs([FromBody] CreateStaffResource resource)
     {
-        var command = CreateStaffCommandFromResourceAssembler.ToCommandFromResource(resource);
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var command = CreateStaffCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
         var result = await commandService.Handle(command);
         if (result is null) return BadRequest();
 
@@ -49,7 +57,13 @@ public class StaffController(IStaffCommandService commandService,
     [SwaggerResponse(StatusCodes.Status200OK, "The list of staffs were found", typeof(IEnumerable<StaffResource>))]
     public async Task<IActionResult> GetAllStaff()
     {
-        var staffs = await queryService.Handle(new GetAllStaffQuery());
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var staffs = await queryService.Handle(new GetAllStaffQuery(userId));
         var staffResources = staffs.Select(StaffResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(staffResources);
     }

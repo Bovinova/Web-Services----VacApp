@@ -1,5 +1,6 @@
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
 
@@ -14,9 +15,9 @@ public class StableQueryService(IStableRepository stableRepository) : IStableQue
     /// <returns></returns>
     public async Task<IEnumerable<Stable>> Handle(GetAllStablesQuery query)
     {
-        return await stableRepository.FindByUserIdAsync(query.UserId);
+        return await stableRepository.FindByUserIdAsync(new RanchUserId(query.UserId));
     }
-
+    
     /// <summary>
     /// Retrieves a Stable entity by its unique identifier.
     /// </summary>
@@ -25,5 +26,11 @@ public class StableQueryService(IStableRepository stableRepository) : IStableQue
     public async Task<Stable> Handle(GetStablesByIdQuery query)
     {
         return await stableRepository.FindByIdAsync(query.Id);
+    }
+    
+    public async Task<int> CountStablesByUserIdAsync(RanchUserId userId)
+    {
+        var stables = await stableRepository.FindByUserIdAsync(userId);
+        return stables.Count();
     }
 }

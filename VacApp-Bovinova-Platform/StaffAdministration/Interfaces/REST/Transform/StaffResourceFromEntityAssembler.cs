@@ -3,14 +3,14 @@ using VacApp_Bovinova_Platform.StaffAdministration.Interfaces.REST.Resources;
 
 namespace VacApp_Bovinova_Platform.StaffAdministration.Interfaces.REST.Transform;
 
-public class StaffResourceFromEntityAssembler
+public static class StaffResourceFromEntityAssembler
 {
     public static StaffResource ToResourceFromEntity(Staff entity)
     {
         return new StaffResource(entity.Id,
             entity.Name,
             entity.EmployeeStatus.Value,
-            entity.CampaignId.CampaignIdentifier
+            entity.CampaignId
         );
     }
 }

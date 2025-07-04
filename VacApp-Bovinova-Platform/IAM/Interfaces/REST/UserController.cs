@@ -1,34 +1,38 @@
 using System.Net.Mime;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Queries;
+using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.IAM.Domain.Services;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
-using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
-using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
-using Swashbuckle.AspNetCore.Annotations;
-using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
-using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
-using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Queries;
-
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
 
 namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
 {
-    [Authorize]
+    [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/v1/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     [Tags("User")]
     public class UserController(
         IUserCommandService commandService,
+        IUserQueryService queryService,
         IBovineQueryService bovineQueryService,
-        IStableQueryService stableQueryService,
-        ICampaignQueryService campaignQueryService
+        ICampaignQueryService campaignQueryService,
+        IVaccineQueryService vaccineQueryService,
+        IStableQueryService stableQueryService
         ) : ControllerBase
     {
+        
         [HttpPost("sign-up")]
-        [AllowAnonymous]
-        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserResource))]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody] SignUpResource resource)
         {
             var command = SignUpCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -36,42 +40,70 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
 
             if (result is null) return BadRequest("User already exists");
 
-            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result);
-
+            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result, resource.Username, resource.Email);
+            
             return CreatedAtAction(nameof(SignUp), userResource);
         }
 
         [HttpPost("sign-in")]
-        [AllowAnonymous]
-        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserResource))]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         public async Task<ActionResult> SignIn([FromBody] SignInResource resource)
         {
+            if (string.IsNullOrEmpty(resource.Email) && string.IsNullOrEmpty(resource.UserName))
+            {
+                return BadRequest("Either Email or UserName must be provided.");
+            }
+
             var command = SignInCommandFromResourceAssembler.ToCommandFromResource(resource);
             var result = await commandService.Handle(command);
 
             if (result is null) return BadRequest("Invalid credentials.");
 
-            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result);
+            var userName = !string.IsNullOrEmpty(resource.UserName)
+                ? resource.UserName
+                : await queryService.GetUserNameByEmail(resource.Email!);
+            
+            var email = !string.IsNullOrEmpty(resource.Email)
+                ? resource.Email
+                : await queryService.GetEmailByUserName(resource.UserName!);
+
+            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result, userName, email);
 
             return Ok(userResource);
         }
-
+        
         [HttpGet("get-info")]
         [SwaggerResponse(StatusCodes.Status200OK, "User info", typeof(UserInfoResource))]
-        public ActionResult GetInfo()
+        public async Task<ActionResult> GetInfo()
         {
-            var user = (User?)HttpContext.Items["User"];
+            // Get user ID from JWT claims
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
 
-            if (user is null) return Unauthorized("User not found.");
 
-            var totalAnimals = bovineQueryService.Handle(new GetAllBovinesQuery(user.Id)).Result.Count();
-            var totalStables = stableQueryService.Handle(new GetAllStablesQuery(user.Id)).Result.Count();
-            var totalCampaigns = campaignQueryService.Handle(new GetAllCampaignsQuery(user.Id)).Result.Count();
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
 
-            if (user is null) return Unauthorized("User not found.");
-            var userInfoResource = UserInfoResourceFromEntityAssembler.ToResourceFromEntity(user, totalAnimals, totalCampaigns, totalStables);
+            // Use the query handler to get the user by ID
+            var user = await queryService.Handle(new GetUserByIdQuery(userId));
+            if (user is null)
+                return NotFound("User not found");
 
-            return Ok(userInfoResource);
+            // Get bovine count
+            var totalBovines = await bovineQueryService.CountBovinesByUserIdAsync(new RanchUserId(userId));
+            
+            // Get campaign count
+            //var totalCampaigns = await campaignQueryService.CountCampaignsByUserIdAsync(new CampaignUserId(userId));
+            
+            // Get vaccine count
+            var totalVaccinations = await vaccineQueryService.CountVaccinesByUserIdAsync(new RanchUserId(userId));
+            
+            // Get vaccine count
+            var totalStables = await stableQueryService.CountStablesByUserIdAsync(new RanchUserId(userId));
+
+
+            // Build and return the response
+            var resource = new UserInfoResource(user.Username, totalBovines, totalVaccinations, totalStables);
+            return Ok(resource);
         }
     }
 }

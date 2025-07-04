@@ -1,4 +1,6 @@
 using System.Net.Mime;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Commands;
@@ -6,12 +8,11 @@ using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
 using VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Resources;
 using VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST.Transform;
-using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace VacApp_Bovinova_Platform.CampaignManagement.Interfaces.REST;
 
-[Authorize]
+[Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
@@ -21,9 +22,13 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
     [HttpPost]
     public async Task<ActionResult> CreateCampaign([FromBody] CreateCampaignResource resource)
     {
-        var user = (User?)HttpContext.Items["User"];
-        if (user is null) return Unauthorized("User not found.");
-        var createCampaignCommand = CreateCampaignCommandFromResourceAssembler.ToCommandFromResource(resource, user.Id);
+        // Extrae el userId desde el claim 'sid' del JWT
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var createCampaignCommand = CreateCampaignCommandFromResourceAssembler.ToCommandFromResource(resource, userId);
         var result = await campaignCommandService.Handle(createCampaignCommand);
         if (result is null) return BadRequest();
         return CreatedAtAction(nameof(GetCampaignById), new { id = result.Id },
@@ -43,9 +48,13 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
     [HttpGet("all-campaigns")]
     public async Task<ActionResult> GetAllCampaigns()
     {
-        var user = (User?)HttpContext.Items["User"];
-        if (user is null) return Unauthorized("User not found.");
-        var campaigns = await campaignQueryService.Handle(new GetAllCampaignsQuery(user.Id));
+        // Recuperar el userId desde el claim 'sid'
+        var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized("Usuario no autenticado.");
+        
+        var campaigns = await campaignQueryService.Handle(new GetAllCampaignsQuery(userId));
         var campaignResources = campaigns.Select(CampaignResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(campaignResources);
     }

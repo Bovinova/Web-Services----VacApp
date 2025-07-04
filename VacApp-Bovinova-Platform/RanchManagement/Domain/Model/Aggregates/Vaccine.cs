@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
+using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 
@@ -38,6 +40,8 @@ public class Vaccine
     [Required]
     [StringLength(300)]
     public string? VaccineImg { get; private set; }
+    private static readonly Regex ImageUrlRegex = new(@"^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$", RegexOptions.IgnoreCase);
+
 
     /// <summary>
     /// Bovine Identifier As Foreign Key
@@ -49,9 +53,28 @@ public class Vaccine
     /// </summary>
     [ForeignKey(nameof(BovineId))]
     public Bovine? Bovine { get; private set; }
+    
+    /// <summary>
+    /// User Identifier As Foreign Key
+    /// </summary>
+    public RanchUserId? RanchUserId { get; set; }
 
     // Default constructor for EF Core
-    private Vaccine() { }
+    private Vaccine()
+    {
+        Name = "";
+    }
+    public Vaccine(int id, string name, string? vaccineType, DateTime? vaccineDate, string? vaccineImg, int bovineId, Bovine? bovine, RanchUserId? ranchUserId)
+    {
+        Id = id;
+        Name = name;
+        VaccineType = vaccineType;
+        VaccineDate = vaccineDate;
+        VaccineImg = ValidateImageUrl(vaccineImg);
+        BovineId = bovineId;
+        Bovine = bovine;
+        RanchUserId = ranchUserId;
+    }
 
     // Constructor with parameters
     public Vaccine(CreateVaccineCommand command)
@@ -59,8 +82,9 @@ public class Vaccine
         Name = command.Name;
         VaccineType = command.VaccineType;
         VaccineDate = command.VaccineDate;
-        VaccineImg = command.VaccineImg;
+        VaccineImg = ValidateImageUrl(command.VaccineImg);
         BovineId = command.BovineId;
+        RanchUserId = command.RanchUserId ?? throw new ArgumentException("RanchUserId must be set by the system");
     }
 
     //Update
@@ -70,5 +94,14 @@ public class Vaccine
         VaccineType = command.VaccineType;
         VaccineDate = command.VaccineDate;
         BovineId = command.BovineId;
+    }
+    
+    private static string ValidateImageUrl(string? imageUrl)
+    {
+        if (string.IsNullOrWhiteSpace(imageUrl) || !ImageUrlRegex.IsMatch(imageUrl))
+        {
+            throw new ArgumentException("The image URL must be a valid link to an image file.");
+        }
+        return imageUrl;
     }
 }
