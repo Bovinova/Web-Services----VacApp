@@ -60,12 +60,18 @@ public class CampaignController(ICampaignCommandService campaignCommandService, 
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteCampaign([FromRoute] int id)
     {
         var campaigns = await campaignCommandService.Handle(new DeleteCampaignCommand(id));
-        var resources = campaigns.Select(CampaignResourceFromEntityAssembler.ToResourceFromEntity);
-        return Ok(resources);
+
+        if (!campaigns.Any())
+            return NotFound(new { message = "Campaign not found" });
+
+        return Ok(new { message = "Deleted successfully" });
     }
+
 
     [HttpPatch("{id}/update-status")]
     public async Task<ActionResult> UpdateCampaignStatus([FromRoute] int id, [FromBody] UpdateCampaignStatusResource resource)

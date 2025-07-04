@@ -169,12 +169,16 @@ public class StaffController(IStaffCommandService commandService,
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteStaff(int id)
     {
         var command = new DeleteStaffCommand(id);
         var result = await commandService.Handle(command);
-        if (result is null) return NotFound();
+        
+        if (result is null)
+            return NotFound(new { message = "Staff not found" });
 
-        return NoContent();
+        return Ok(new { message = "Deleted successfully" });
     }
 }

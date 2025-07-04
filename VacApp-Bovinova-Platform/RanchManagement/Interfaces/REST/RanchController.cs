@@ -139,15 +139,16 @@ public class BovineController(IBovineCommandService commandService,
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBovine(int id)
     {
         var command = new DeleteBovineCommand(id);
         var result = await commandService.Handle(command);
-        if (result is null) return NotFound();
+        if (result is null)
+            return NotFound(new { message = "Bovine not found" });
 
-        return NoContent();
+        return Ok(new { message = "Deleted successfully" });
     }
 }
 
@@ -277,15 +278,16 @@ public class VaccineController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteVaccine(int id)
     {
         var command = new DeleteVaccineCommand(id);
         var result = await commandService.Handle(command);
-        if (result is null) return NotFound();
+        if (result is null)
+            return NotFound(new { message = "Vaccine not found" });
 
-        return NoContent();
+        return Ok(new { message = "Deleted successfully" });
     }
 
 }
