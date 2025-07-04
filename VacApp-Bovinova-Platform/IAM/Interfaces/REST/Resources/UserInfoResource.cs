@@ -1,7 +1,7 @@
 namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
 
 public record UserInfoResource(
-    String Name,
+    string Name,
     int TotalBovines,
     //int TotalCampaigns,
     int TotalVaccinations,

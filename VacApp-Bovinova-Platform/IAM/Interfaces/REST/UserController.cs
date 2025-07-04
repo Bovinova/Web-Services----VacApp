@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.CampaignManagement.Domain.Services;
 using VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates;
+using VacApp_Bovinova_Platform.IAM.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.IAM.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.IAM.Domain.Services;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
@@ -30,7 +31,9 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         IStableQueryService stableQueryService
         ) : ControllerBase
     {
-        
+        /*
+         * 
+         */
         [HttpPost("sign-up")]
         [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody] SignUpResource resource)
@@ -45,6 +48,9 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             return CreatedAtAction(nameof(SignUp), userResource);
         }
 
+        /*
+         * 
+         */
         [HttpPost("sign-in")]
         [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         public async Task<ActionResult> SignIn([FromBody] SignInResource resource)
@@ -72,6 +78,9 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             return Ok(userResource);
         }
         
+        /*
+         * 
+         */
         [HttpGet("get-info")]
         [SwaggerResponse(StatusCodes.Status200OK, "User info", typeof(UserInfoResource))]
         public async Task<ActionResult> GetInfo()
@@ -103,6 +112,94 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
 
             // Build and return the response
             var resource = new UserInfoResource(user.Username, totalBovines, totalVaccinations, totalStables);
+            return Ok(resource);
+        }
+        
+        /*
+         * 
+         */
+        [HttpPut("update-profile")]
+        [SwaggerResponse(StatusCodes.Status200OK, "User updated successfully")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "User not found")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserResource resource)
+        {
+            // Validar que los campos requeridos estén presentes
+            if (string.IsNullOrWhiteSpace(resource.Username) || string.IsNullOrWhiteSpace(resource.Email))
+            {
+                return BadRequest("Username and Email are required");
+            }
+
+            // Obtener el ID del usuario desde el JWT
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+
+            try
+            {
+                var command = UpdateUserCommandFromResourceAssembler.ToCommandFromResource(resource);
+                var result = await commandService.Handle(command, userId);
+        
+                if (!result)
+                    return NotFound("User not found");
+
+                return Ok(new { message = "User updated successfully" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+         * 
+         */
+        [HttpDelete("delete-account")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Account deleted successfully")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "User not found")]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+
+            try
+            {
+                var command = new DeleteUserCommand(userId);
+                var result = await commandService.Handle(command);
+        
+                if (!result)
+                    return NotFound("User not found");
+
+                return Ok(new { message = "Account deleted successfully" });
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+         * 
+         */
+        [HttpGet("profile")]
+        [SwaggerResponse(StatusCodes.Status200OK, "User profile", typeof(UserProfileResource))]
+        public async Task<ActionResult> GetProfile()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+
+            var user = await queryService.Handle(new GetUserByIdQuery(userId));
+            if (user is null)
+                return NotFound("User not found");
+
+            var resource = new UserProfileResource(user.Username, user.Email, user.EmailConfirmed);
             return Ok(resource);
         }
     }

@@ -38,5 +38,14 @@ namespace VacApp_Bovinova_Platform.IAM.Domain.Model.Aggregates
             }
         }
 
+        public void Update(UpdateUserCommand command)
+        {
+            Username = command.Username;
+            Email = command.Email;
+            if (!System.Text.RegularExpressions.Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                throw new ArgumentException("Invalid email format.", nameof(command.Email));
+            }
+        }
     }
 }

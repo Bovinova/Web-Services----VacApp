@@ -28,5 +28,11 @@ namespace VacApp_Bovinova_Platform.IAM.Infrastructure.Repositories
             context.Set<User>().Update(user);
             await context.SaveChangesAsync();
         }
+
+        public async Task DeleteAsync(User user)
+        {
+            context.Set<User>().Remove(user);
+            await context.SaveChangesAsync();
+        }
     }
 }

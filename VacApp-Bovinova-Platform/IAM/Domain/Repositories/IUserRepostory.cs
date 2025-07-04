@@ -12,6 +12,8 @@ namespace VacApp_Bovinova_Platform.IAM.Domain.Repositories
         Task<IEnumerable<User>> FindAllAsync();
         
         Task UpdateAsync(User user);
+        
+        Task DeleteAsync(User user);
 
     }
 }
