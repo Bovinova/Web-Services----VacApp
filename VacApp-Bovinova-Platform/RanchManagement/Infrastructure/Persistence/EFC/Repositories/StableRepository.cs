@@ -14,11 +14,6 @@ public class StableRepository(AppDbContext ctx)
     {
         return await Context.Set<Stable>().FirstOrDefaultAsync(f => f.Name == name);
     }
-
-    public async Task<IEnumerable<Stable>> FindByUserIdAsync(int userId)
-    {
-        return await Context.Set<Stable>().Where(s => s.UserId == userId).ToListAsync();
-    }
     
     public async Task<IEnumerable<Stable>> FindByUserIdAsync(RanchUserId userId)
     {
