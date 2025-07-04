@@ -44,6 +44,9 @@ public class Stable
             throw new ArgumentException("Limit must be greater than 0");
         }
         
+        if (string.IsNullOrEmpty(command.Name))
+            throw new ArgumentException("Name must not be empty");
+        
         Limit = command.Limit;
         Name = command.Name;
         RanchUserId = command.RanchUserId ?? throw new ArgumentException("RanchUserId must be set by the system");

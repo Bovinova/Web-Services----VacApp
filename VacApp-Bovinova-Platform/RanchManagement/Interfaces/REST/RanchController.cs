@@ -30,6 +30,14 @@ public class BovineController(IBovineCommandService commandService,
     /// <param name="resource"></param>
     /// <returns></returns>
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Create a new bovine",
+        Description = "Creates a new bovine associated with the authenticated user.",
+        OperationId = "CreateBovines"
+    )]
+    [SwaggerResponse(StatusCodes.Status201Created, "Bovine successfully created", typeof(BovineResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateBovines([FromForm] CreateBovineResource resource)
     {
@@ -283,6 +291,14 @@ public class StableController(
    IStableQueryService queryService) : ControllerBase
 {
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Create a new stable",
+        Description = "Creates a new stable associated with the authenticated user.",
+        OperationId = "CreateStable"
+    )]
+    [SwaggerResponse(StatusCodes.Status201Created, "Stable successfully created", typeof(StableResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error")]
     public async Task<IActionResult> CreateStables([FromBody] CreateStableResource resource)
     {
         // Extrae el userId desde el claim 'sid' del JWT

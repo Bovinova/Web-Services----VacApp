@@ -4,35 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5866382b-7e9c-43a1-abab-010c62711b72" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/QueryServices/StableQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/QueryServices/StableQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/QueryServices/VaccineQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Application/Internal/QueryServices/VaccineQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Bovine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Bovine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Stable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Stable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Vaccine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Aggregates/Vaccine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateStableCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateStableCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateVaccineCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Commands/CreateVaccineCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Queries/GetAllStablesQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Queries/GetAllStablesQuery.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Queries/GetAllVaccinesQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Model/Queries/GetAllVaccinesQuery.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Repositories/IStableRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Repositories/IStableRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Repositories/IVaccineRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Repositories/IVaccineRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IStableQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IStableQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IVaccineQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Domain/Services/IVaccineQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Persistence/EFC/Repositories/StableRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Persistence/EFC/Repositories/StableRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Persistence/EFC/Repositories/VaccineRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Infrastructure/Persistence/EFC/Repositories/VaccineRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/RanchController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/RanchController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateBovineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateBovineCommandFromResourceAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateStableCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateStableCommandFromResourceAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateVaccineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/CreateVaccineCommandFromResourceAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/StableResourceFromEntityAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/StableResourceFromEntityAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateBovineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateBovineCommandFromResourceAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateStableCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateStableCommandFromResourceAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateVaccineCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/UpdateVaccineCommandFromResourceAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/VaccineResourceFromEntityAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/RanchManagement/Interfaces/REST/Transform/VaccineResourceFromEntityAssembler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/StaffAdministration/Domain/Model/Aggregates/Staff.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/StaffAdministration/Domain/Model/Aggregates/Staff.cs" afterDir="false" />
-    </list>
+    <list default="true" id="5866382b-7e9c-43a1-abab-010c62711b72" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -145,6 +117,7 @@
       <workItem from="1749076141674" duration="973000" />
       <workItem from="1751320211046" duration="8000" />
       <workItem from="1751320236009" duration="1238000" />
+      <workItem from="1751659135954" duration="64000" />
     </task>
     <servers />
   </component>

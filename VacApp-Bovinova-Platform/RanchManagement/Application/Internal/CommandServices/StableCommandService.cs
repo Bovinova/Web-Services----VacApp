@@ -17,10 +17,10 @@ public class StableCommandService(IStableRepository stableRepository,
         if (stable != null) 
             throw new Exception($"Stable entity with name '{command.Name}' already exists.");
         // Create a new Stable entity from the command data
-        stable = new Stable(command);
 
         try
         {
+            stable = new Stable(command);
             // Add the new Stable entity to the repository and complete the transaction
             await stableRepository.AddAsync(stable);
             await unitOfWork.CompleteAsync();
