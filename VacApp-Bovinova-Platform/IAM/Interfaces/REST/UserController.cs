@@ -10,6 +10,7 @@ using VacApp_Bovinova_Platform.IAM.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.IAM.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.IAM.Domain.Services;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
+using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources.UserResources;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.ValueObjects;
@@ -21,7 +22,7 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
     [ApiController]
     [Route("api/v1/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
-    [Tags("User")]
+    [Tags("Users")]
     public class UserController(
         IUserCommandService commandService,
         IUserQueryService queryService,

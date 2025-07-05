@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +9,10 @@ using VacApp_Bovinova_Platform.Shared.Infrastructure.Persistence.EFC.Configurati
 
 namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST;
 
-[Route("api/v1/[controller]")]
 [ApiController]
+[Route("api/v1/[controller]")]
+[Produces(MediaTypeNames.Application.Json)]
+[Tags("Google Users")]
 public class UserGoogleController(IGoogleAuthorization googleAuthorization,
     AppDbContext context, IConfiguration configuration) : ControllerBase
 {

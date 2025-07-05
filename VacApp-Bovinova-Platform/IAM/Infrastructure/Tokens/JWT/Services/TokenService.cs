@@ -32,6 +32,27 @@ namespace VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.JWT.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return token;
         }
+        
+        public string GenerateToken(Admin admin)
+        {
+            var secret = _tokenSettings.Secret;
+            var key = Encoding.ASCII.GetBytes(secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Sid, admin.Id.ToString()),
+                    new Claim(ClaimTypes.Name, admin.Email)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials =
+                    new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var tokenHandler = new JsonWebTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return token;
+        }
 
         public async Task<int?> ValidateToken(string token)
         {

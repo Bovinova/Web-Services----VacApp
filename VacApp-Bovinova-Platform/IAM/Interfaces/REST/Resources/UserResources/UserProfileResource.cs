@@ -1,4 +1,4 @@
-namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
+namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources.UserResources;
 
 public record UserProfileResource(
     string Username,

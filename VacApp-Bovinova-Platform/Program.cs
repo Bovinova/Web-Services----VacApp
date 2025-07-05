@@ -136,10 +136,15 @@ builder.Services.AddScoped<IUserRepostory, UserRepository>();
 builder.Services.AddScoped<IUserCommandService, UserCommandService>();
 builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 builder.Services.AddScoped<IHashingService, HashingService>();
-builder.Services.AddScoped<IGoogleAuthHelper, GoogleAuthHelperService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+//
+builder.Services.AddScoped<IGoogleAuthHelper, GoogleAuthHelperService>();
 builder.Services.AddScoped<IMicrosoftAuthorization, MicrosoftAuthorizationService>();
+//
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminCommandService, AdminCommandService>();
+builder.Services.AddScoped<IAdminQueryService, AdminQueryService>();
 
 
 // Configuración correcta de autenticación

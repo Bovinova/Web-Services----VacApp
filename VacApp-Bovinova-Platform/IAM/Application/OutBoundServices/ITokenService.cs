@@ -6,5 +6,6 @@ namespace VacApp_Bovinova_Platform.IAM.Application.OutBoundServices
     {
         string GenerateToken(User user);
         Task<int?> ValidateToken(string token);
+        string GenerateToken(Admin admin);
     }
 }

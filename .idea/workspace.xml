@@ -4,7 +4,49 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5866382b-7e9c-43a1-abab-010c62711b72" name="Changes" comment="" />
+    <list default="true" id="5866382b-7e9c-43a1-abab-010c62711b72" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/CommandServices/AdminCommandService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/QueryServices/AdminQueryService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Aggregates/Admin.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Commands/AdminSignInCommand.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Commands/CreateAdminCommand.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Commands/UpdateAdminCommand.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Queries/GetAdminByEmailQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Queries/GetAdminByIdQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Model/Queries/GetAllAdminsQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Repositories/IAdminRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IAdminCommandService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Domain/Services/IAdminQueryService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Repositories/AdminRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/AdminController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/AdminResources/AdminResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/AdminResources/AdminSignInResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/AdminResources/CreateAdminResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/AdminResources/UpdateAdminResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/AdminResourceFromEntityAssembler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/AdminSignInCommandFromResourceAssembler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/CreateAdminCommandFromResourceAssembler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UpdateAdminCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/OutBoundServices/ITokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Application/OutBoundServices/ITokenService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Tokens/JWT/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Infrastructure/Tokens/JWT/Services/TokenService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/SignInResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResources/SignInResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/SignUpResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResources/SignUpResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UpdateUserResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResources/UpdateUserResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserInfoResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResources/UserInfoResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserProfileResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResources/UserProfileResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Resources/UserResources/UserResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/SignInCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/SignInCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/SignUpCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/SignUpCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UpdateUserCommandFromResourceAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UpdateUserCommandFromResourceAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserInfoResourceFromEntityAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserInfoResourceFromEntityAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserResourceFromEntityAssembler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/Transform/UserResourceFromEntityAssembler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserGoogleController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserGoogleController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserOutlookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/IAM/Interfaces/REST/UserOutlookController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Infrastructure/Persistence/EFC/Configuration/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VacApp-Bovinova-Platform/Shared/Infrastructure/Persistence/EFC/Configuration/AppDbContext.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,20 +123,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "development",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "settings.sync",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;development&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -119,6 +161,8 @@
       <workItem from="1751320236009" duration="1238000" />
       <workItem from="1751659135954" duration="64000" />
       <workItem from="1751661715878" duration="6000" />
+      <workItem from="1751669824517" duration="616000" />
+      <workItem from="1751673883787" duration="357000" />
     </task>
     <servers />
   </component>
@@ -128,23 +172,5 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
-          <option name="timeStamp" value="1" />
-        </breakpoint>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
-          <option name="timeStamp" value="2" />
-        </breakpoint>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
-          <option name="timeStamp" value="3" />
-        </breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

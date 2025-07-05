@@ -1,5 +1,5 @@
 using VacApp_Bovinova_Platform.IAM.Domain.Model.Commands;
-using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources;
+using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources.UserResources;
 
 namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
 

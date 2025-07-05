@@ -39,6 +39,11 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<MicrosoftCredential>().HasKey(f => f.UserId);
         builder.Entity<MicrosoftCredential>().Property(f => f.UserId).IsRequired();
         builder.Entity<MicrosoftCredential>().Property(f => f.Email).IsRequired();
+        //Admin User
+        builder.Entity<Admin>().HasKey(f => f.Id);
+        builder.Entity<Admin>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Admin>().Property(f => f.Email).IsRequired();
+        builder.Entity<Admin>().Property(f => f.EmailConfirmed).IsRequired();
         
         
         /* Ranch Management BC -------------------------------------------------------------------------------------- */
