@@ -40,8 +40,6 @@ public class Vaccine
     [Required]
     [StringLength(300)]
     public string? VaccineImg { get; private set; }
-    private static readonly Regex ImageUrlRegex = new(@"^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$", RegexOptions.IgnoreCase);
-
 
     /// <summary>
     /// Bovine Identifier As Foreign Key
@@ -64,17 +62,6 @@ public class Vaccine
     {
         Name = "";
     }
-    public Vaccine(int id, string name, string? vaccineType, DateTime? vaccineDate, string? vaccineImg, int bovineId, Bovine? bovine, RanchUserId? ranchUserId)
-    {
-        Id = id;
-        Name = name;
-        VaccineType = vaccineType;
-        VaccineDate = vaccineDate;
-        VaccineImg = ValidateImageUrl(vaccineImg);
-        BovineId = bovineId;
-        Bovine = bovine;
-        RanchUserId = ranchUserId;
-    }
 
     // Constructor with parameters
     public Vaccine(CreateVaccineCommand command)
@@ -82,7 +69,7 @@ public class Vaccine
         Name = command.Name;
         VaccineType = command.VaccineType;
         VaccineDate = command.VaccineDate;
-        VaccineImg = ValidateImageUrl(command.VaccineImg);
+        VaccineImg = command.VaccineImg;
         BovineId = command.BovineId;
         RanchUserId = command.RanchUserId ?? throw new ArgumentException("RanchUserId must be set by the system");
     }
@@ -94,14 +81,5 @@ public class Vaccine
         VaccineType = command.VaccineType;
         VaccineDate = command.VaccineDate;
         BovineId = command.BovineId;
-    }
-    
-    private static string ValidateImageUrl(string? imageUrl)
-    {
-        if (string.IsNullOrWhiteSpace(imageUrl) || !ImageUrlRegex.IsMatch(imageUrl))
-        {
-            throw new ArgumentException("The image URL must be a valid link to an image file.");
-        }
-        return imageUrl;
     }
 }

@@ -8,5 +8,5 @@ public record CreateBovineResource(
     DateTime? BirthDate,
     string? Breed,
     string? Location,
-    string? BovineImg,
+    IFormFile? FileData,
     int? StableId);

@@ -83,12 +83,19 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
          * 
          */
         [HttpGet("get-info")]
-        [SwaggerResponse(StatusCodes.Status200OK, "User info", typeof(Resources.UserInfoResource))]
-        public ActionResult GetInfo()
+        [SwaggerResponse(StatusCodes.Status200OK, "User info", typeof(UserInfoResource))]
+        public async Task<ActionResult> GetInfo()
         {
-            var user = (User?)HttpContext.Items["User"];
+            // Get user ID from JWT claims
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
 
-            if (user is null) return Unauthorized("User not found.");
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+            
+            // Use the query handler to get the user by ID
+            var user = await queryService.Handle(new GetUserByIdQuery(userId));
+            if (user is null)
+                return NotFound("User not found");
 
             // Total de bovinos
             var totalBovines = bovineQueryService.Handle(new GetAllBovinesQuery(user.Id)).Result.Count();
@@ -99,17 +106,19 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             // Total de campañas
             var totalCampaigns = campaignQueryService.Handle(new GetAllCampaignsQuery(user.Id)).Result.Count();
 
+            /*
             // Próximas campañas
             var nextCampaigns = campaignQueryService
                 .Handle(new GetAllCampaignsQuery(user.Id))
                 .Result
                 .Where(c => c.StartDate >= DateTime.Now)
                 .Select(c => new CampaignInfoResource(c.Id, c.Name, c.StartDate))
-                .ToArray();
+                .ToArray();*/
 
             // Total de vacunas
             var totalVaccinations = vaccineQueryService.CountVaccinesByUserIdAsync(new RanchUserId(user.Id)).Result;
 
+            /*
             var userInfoResource = new Resources.UserInfoResource(
                 user.Id,
                 user.Username,
@@ -118,9 +127,99 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
                 totalStables,
                 totalVaccinations,
                 nextCampaigns
-            );
+            );*/
+            
+            // Build and return the response
+            var resource = new UserInfoResource(user.Username, totalBovines, totalVaccinations, totalStables);
+            return Ok(resource);
+        }
 
-            return Ok(userInfoResource);
+                /*
+         * 
+         */
+        [HttpPut("update-profile")]
+        [SwaggerResponse(StatusCodes.Status200OK, "User updated successfully")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "User not found")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserResource resource)
+        {
+            // Validar que los campos requeridos estén presentes
+            if (string.IsNullOrWhiteSpace(resource.Username) || string.IsNullOrWhiteSpace(resource.Email))
+            {
+                return BadRequest("Username and Email are required");
+            }
+
+            // Obtener el ID del usuario desde el JWT
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+
+            try
+            {
+                var command = UpdateUserCommandFromResourceAssembler.ToCommandFromResource(resource);
+                var result = await commandService.Handle(command, userId);
+        
+                if (!result)
+                    return NotFound("User not found");
+
+                return Ok(new { message = "User updated successfully" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+         * 
+         */
+        [HttpDelete("delete-account")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Account deleted successfully")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "User not found")]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+
+            try
+            {
+                var command = new DeleteUserCommand(userId);
+                var result = await commandService.Handle(command);
+        
+                if (!result)
+                    return NotFound("User not found");
+
+                return Ok(new { message = "Account deleted successfully" });
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+         * 
+         */
+        [HttpGet("profile")]
+        [SwaggerResponse(StatusCodes.Status200OK, "User profile", typeof(UserProfileResource))]
+        public async Task<ActionResult> GetProfile()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid or missing user ID");
+
+            var user = await queryService.Handle(new GetUserByIdQuery(userId));
+            if (user is null)
+                return NotFound("User not found");
+
+            var resource = new UserProfileResource(user.Username, user.Email, user.EmailConfirmed);
+            return Ok(resource);
         }
 
     }

@@ -42,6 +42,8 @@ using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Google.Services;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Google.TokenHandler;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.OAuth.Outlook.Services;
 using VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.Google.Services;
+using VacApp_Bovinova_Platform.Shared.Application.OutboundServices;
+using VacApp_Bovinova_Platform.Shared.Infrastructure.Media.Cloudinary;
 
 DotEnv.Load();
 
@@ -128,7 +130,7 @@ builder.Services.AddCors(options =>
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddScoped<IMediaStorageService, CloudinaryService>();
 // Bounded Context Injection Configuration for Business
 
 //IAM BC

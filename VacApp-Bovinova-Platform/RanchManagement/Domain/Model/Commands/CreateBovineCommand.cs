@@ -10,4 +10,5 @@ public record CreateBovineCommand(
     string? Location,
     string? BovineImg,
     int? StableId,
-    RanchUserId? RanchUserId);
+    RanchUserId? RanchUserId,
+    Stream? FileData);

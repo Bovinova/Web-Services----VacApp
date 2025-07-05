@@ -29,10 +29,7 @@
         <PackageReference Include="dotenv.net" Version="3.2.1" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.9.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Shared\Application\OutboundServices\" />
+        <PackageReference Include="CloudinaryDotNet" Version="1.27.5" />
     </ItemGroup>
 
 </Project>

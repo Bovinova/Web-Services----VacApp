@@ -2,12 +2,14 @@ using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Aggregates;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Model.Commands;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Repositories;
 using VacApp_Bovinova_Platform.RanchManagement.Domain.Services;
+using VacApp_Bovinova_Platform.Shared.Application.OutboundServices;
 using VacApp_Bovinova_Platform.Shared.Domain.Repositories;
 
 namespace VacApp_Bovinova_Platform.RanchManagement.Application.Internal.CommandServices;
 
 public class BovineCommandService(IBovineRepository bovineRepository,
     IStableRepository stableRepository,
+    IMediaStorageService mediaStorageService,
     IUnitOfWork unitOfWork) : IBovineCommandService
 {
     /// <summary>
@@ -45,17 +47,17 @@ public class BovineCommandService(IBovineRepository bovineRepository,
         }
 
         // Creates a new bovine entity
-        var bovineImg = command.BovineImg ?? "https://placehold.co/600x400";
-        bovine = new Bovine(
-            command.Name, 
-            command.Gender, 
-            command.BirthDate, 
-            command.Breed, 
-            command.Location, 
-            bovineImg, 
-            command.StableId,
-            command.RanchUserId
-            );
+        if (command.FileData is not null)
+        {
+            var bovineImg = mediaStorageService.UploadFileAsync(command.Name, command.FileData);
+            var commandWithImg = command with { BovineImg = bovineImg };
+            bovine = new Bovine(commandWithImg);
+        }
+        else
+        {
+            var commandWithImg = command with { BovineImg = "https://placehold.co/600x400" };
+            bovine = new Bovine(commandWithImg);
+        }
 
         try
         {

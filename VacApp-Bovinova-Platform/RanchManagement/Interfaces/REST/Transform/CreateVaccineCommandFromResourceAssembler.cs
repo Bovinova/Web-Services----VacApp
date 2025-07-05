@@ -12,9 +12,10 @@ public static class CreateVaccineCommandFromResourceAssembler
             resource.Name,
             resource.VaccineType,
             resource.VaccineDate,
-            resource.VaccineImg,
+            string.Empty,
             resource.BovineId,
-            new RanchUserId(userId)
+            new RanchUserId(userId),
+            resource.FileData?.OpenReadStream() ?? null
         );
     }
 }

@@ -62,7 +62,6 @@ public class Bovine
     [Required]
     [StringLength(300)]
     public string? BovineImg { get; private set; }
-    private static readonly Regex ImageUrlRegex = new(@"^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$", RegexOptions.IgnoreCase);
     
     
     /// <summary>
@@ -94,7 +93,7 @@ public class Bovine
         BirthDate = birthDate;
         Breed = breed;
         Location = location;
-        BovineImg = ValidateImageUrl(bovineImg);
+        BovineImg = bovineImg;
         StableId = stableId;
         RanchUserId = ranchUserId;
     }
@@ -110,7 +109,7 @@ public class Bovine
         BirthDate = command.BirthDate;
         Breed = command.Breed;
         Location = command.Location;
-        BovineImg = ValidateImageUrl(command.BovineImg);
+        BovineImg = command.BovineImg;
         StableId = command.StableId;
         RanchUserId = command.RanchUserId ?? throw new ArgumentException("UserId must be set by the system");
     }
@@ -127,14 +126,5 @@ public class Bovine
         Breed = command.Breed;
         Location = command.Location;
         StableId = command.StableId;
-    }
-    
-    private static string ValidateImageUrl(string? imageUrl)
-    {
-        if (string.IsNullOrWhiteSpace(imageUrl) || !ImageUrlRegex.IsMatch(imageUrl))
-        {
-            throw new ArgumentException("The image URL must be a valid link to an image file.");
-        }
-        return imageUrl;
     }
 }
