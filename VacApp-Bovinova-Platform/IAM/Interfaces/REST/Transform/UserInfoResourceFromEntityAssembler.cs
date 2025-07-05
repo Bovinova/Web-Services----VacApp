@@ -6,8 +6,8 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
 public static class UserInfoResourceFromEntityAssembler
 {
     public static UserInfoResource ToResourceFromEntity(
-        User user, 
-        int totalBovines, 
+        User user,
+        int totalBovines,
         //int totalCampaigns, 
         int totalVaccinations,
         int totalStables)
