@@ -8,16 +8,19 @@ public static class UserInfoResourceFromEntityAssembler
     public static UserInfoResource ToResourceFromEntity(
         User user,
         int totalBovines,
-        //int totalCampaigns, 
+        int totalCampaigns,
         int totalVaccinations,
-        int totalStables)
+        int totalStables,
+        CampaignInfoResource[] nextCampaigns)
     {
         return new UserInfoResource(
+            user.Id,
             user.Username,
             totalBovines,
-            //totalCampaigns,
+            totalCampaigns,
+            totalStables,
             totalVaccinations,
-            totalStables
+            nextCampaigns
         );
     }
 }

@@ -91,52 +91,77 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
 
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
                 return Unauthorized("Invalid or missing user ID");
-            
+
             // Use the query handler to get the user by ID
             var user = await queryService.Handle(new GetUserByIdQuery(userId));
             if (user is null)
                 return NotFound("User not found");
 
             // Total de bovinos
-            var totalBovines = bovineQueryService.Handle(new GetAllBovinesQuery(user.Id)).Result.Count();
+            var totalBovines = bovineQueryService.Handle(new GetAllBovinesQuery(userId)).Result.Count();
 
             // Total de establos
-            var totalStables = stableQueryService.Handle(new GetAllStablesQuery(user.Id)).Result.Count();
+            var totalStables = stableQueryService.Handle(new GetAllStablesQuery(userId)).Result.Count();
 
             // Total de campañas
-            var totalCampaigns = campaignQueryService.Handle(new GetAllCampaignsQuery(user.Id)).Result.Count();
+            var totalCampaigns = campaignQueryService.Handle(new GetAllCampaignsQuery(userId)).Result.Count();
 
-            /*
+
             // Próximas campañas
             var nextCampaigns = campaignQueryService
-                .Handle(new GetAllCampaignsQuery(user.Id))
+                .Handle(new GetAllCampaignsQuery(userId))
                 .Result
                 .Where(c => c.StartDate >= DateTime.Now)
                 .Select(c => new CampaignInfoResource(c.Id, c.Name, c.StartDate))
-                .ToArray();*/
+                .ToArray();
 
             // Total de vacunas
-            var totalVaccinations = vaccineQueryService.CountVaccinesByUserIdAsync(new RanchUserId(user.Id)).Result;
+            var totalVaccinations = vaccineQueryService.CountVaccinesByUserIdAsync(new RanchUserId(userId)).Result;
 
             /*
             var userInfoResource = new Resources.UserInfoResource(
-                user.Id,
-                user.Username,
+                userId,
+                User.Identity?.Name ?? "Unknown",
                 totalBovines,
                 totalCampaigns,
                 totalStables,
                 totalVaccinations,
                 nextCampaigns
             );*/
-            
+
             // Build and return the response
-            var resource = new UserInfoResource(user.Username, totalBovines, totalVaccinations, totalStables);
+            var resource = new UserInfoResource(
+                user.Id,
+                user.Username,
+                 totalBovines,
+                 totalCampaigns,
+                 totalStables,
+                  totalVaccinations,
+                   nextCampaigns);
             return Ok(resource);
+
+            /*
+            {
+              "id": 0,
+              "name": "string",
+              "totalAnimals": 0,
+              "totalCampaigns": 0,
+              "totalStables": 0,
+              "totalVaccinations": 0,
+              "nextCampaigns": [
+                {
+                  "id": 0,
+                  "name": "string",
+                  "startDate": "2025-07-05T22:36:02.132Z"
+                }
+              ]
+            }
+            */
         }
 
-                /*
-         * 
-         */
+        /*
+ * 
+ */
         [HttpPut("update-profile")]
         [SwaggerResponse(StatusCodes.Status200OK, "User updated successfully")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
@@ -159,7 +184,7 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             {
                 var command = UpdateUserCommandFromResourceAssembler.ToCommandFromResource(resource);
                 var result = await commandService.Handle(command, userId);
-        
+
                 if (!result)
                     return NotFound("User not found");
 
@@ -192,13 +217,14 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             {
                 var command = new DeleteUserCommand(userId);
                 var result = await commandService.Handle(command);
-        
+
                 if (!result)
                     return NotFound("User not found");
 
                 return Ok(new { message = "Account deleted successfully" });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
