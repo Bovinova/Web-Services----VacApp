@@ -1,11 +1,11 @@
 using System.Net.Mime;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VacApp_Bovinova_Platform.IAM.Domain.Model.Queries;
 using VacApp_Bovinova_Platform.IAM.Domain.Services;
+using VacApp_Bovinova_Platform.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Resources.AdminResources;
 using VacApp_Bovinova_Platform.IAM.Interfaces.REST.Transform;
 
@@ -17,10 +17,11 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
     [Tags("Admin Users")]
     public class AdminController(
         IAdminCommandService commandService,
-        IAdminQueryService queryService) : ControllerBase
+        IAdminQueryService queryService,
+        IUserQueryService userQueryService) : ControllerBase
     {
         [HttpPost("create")]
-        [AllowAnonymous]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status201Created, "Admin created successfully")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminResource resource)
@@ -44,7 +45,6 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         }
 
         [HttpPost("sign-in")]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, "Admin signed in successfully")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid credentials")]
         public async Task<ActionResult> SignIn([FromBody] AdminSignInResource resource)
@@ -64,7 +64,8 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         }
 
         [HttpGet("profile")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AdminOnly]
+        [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerResponse(StatusCodes.Status200OK, "Admin profile retrieved")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Admin not found")]
@@ -82,7 +83,8 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         }
 
         [HttpPut("update-profile")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AdminOnly]
+        [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerResponse(StatusCodes.Status200OK, "Admin updated successfully")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
@@ -113,7 +115,8 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         }
 
         [HttpDelete("delete")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AdminOnly]
+        [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerResponse(StatusCodes.Status200OK, "Admin deleted successfully")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
         public async Task<IActionResult> DeleteAdmin()
@@ -137,7 +140,8 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
         }
 
         [HttpGet("all")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AdminOnly]
+        [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerResponse(StatusCodes.Status200OK, "All admins retrieved")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
         public async Task<ActionResult> GetAllAdmins()
@@ -146,5 +150,27 @@ namespace VacApp_Bovinova_Platform.IAM.Interfaces.REST
             var adminResources = admins.Select(a => new { Email = a.Email, Id = a.Id });
             return Ok(adminResources);
         }
+        
+        [HttpGet("all-users")]
+        [AdminOnly]
+        [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [SwaggerResponse(StatusCodes.Status200OK, "All users retrieved")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
+        public async Task<ActionResult> GetAllUsers()
+        {
+            var users = await userQueryService.Handle(new GetAllUsersQuery());
+
+            var userResources = users.Select(u => new
+            {
+                u.Id,
+                u.Username,
+                u.Email,
+                u.EmailConfirmed
+            });
+
+            return Ok(userResources);
+        }
+
+
     }
 }

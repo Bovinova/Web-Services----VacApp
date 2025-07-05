@@ -42,7 +42,8 @@ namespace VacApp_Bovinova_Platform.IAM.Infrastructure.Tokens.JWT.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Sid, admin.Id.ToString()),
-                    new Claim(ClaimTypes.Name, admin.Email)
+                    new Claim(ClaimTypes.Name, admin.Email),
+                    new Claim("user_type", "Admin"),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials =
